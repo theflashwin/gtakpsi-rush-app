@@ -49,38 +49,39 @@ async fn main() -> Result<(), Error> {
 
     dotenv().ok();
 
-    let mongo_uri = env::var("MONGO_URI").expect("MONGO URI Must be Set");
+    // let mongo_uri = env::var("MONGO_URI").expect("MONGO URI Must be Set");
 
-    controllers::db::initialize_mongo_client(&mongo_uri).await?;
+    controllers::db::initialize_mongo_client(&"mongodb+srv://ashwin:ashwin@cluster0.fmupqcr.mongodb.net/raffy").await?;
 
     let app = Router::new()
 
-        .route("/rushee/signup", post(controllers::rushee::signup))
-        .route("/rushee/get-rushees", get(controllers::rushee::get_rushees))
-        .route("/rushee/:id", get(controllers::rushee::get_rushee))
-        .route("/rushee/post-comment/:id",post(controllers::rushee::post_comment))
-        .route("/rushee/post-pis/:id", post(controllers::rushee::post_pis))
-        .route("/rushee/update-attendance/:id",post(controllers::rushee::update_attendance))
-        .route("/rushee/update-cloud/:id", post(controllers::rushee::update_cloud))
-        .route("/rushee/update-rushee/:id", post(controllers::rushee::update_rushee))
-        .route("/rushee/reschedule-pis/:id", post(controllers::rushee::reschedule_pis))
-        .route("/rushee/edit-comment/:id", post(controllers::rushee::edit_comment))
-        .route("/rushee/delete-comment/:id", post(controllers::rushee::delete_comment))
+        .route("/rushee/signup", post(controllers::rushee::signup).options(|| async { StatusCode::OK }))
+        .route("/rushee/get-rushees", get(controllers::rushee::get_rushees).options(|| async { StatusCode::OK }))
+        .route("/rushee/:id", get(controllers::rushee::get_rushee).options(|| async { StatusCode::OK }))
+        .route("/rushee/post-comment/:id",post(controllers::rushee::post_comment).options(|| async { StatusCode::OK }))
+        .route("/rushee/post-pis/:id", post(controllers::rushee::post_pis).options(|| async { StatusCode::OK }))
+        .route("/rushee/update-attendance/:id",post(controllers::rushee::update_attendance).options(|| async { StatusCode::OK }))
+        .route("/rushee/update-cloud/:id", post(controllers::rushee::update_cloud).options(|| async { StatusCode::OK }))
+        .route("/rushee/update-rushee/:id", post(controllers::rushee::update_rushee).options(|| async { StatusCode::OK }))
+        .route("/rushee/reschedule-pis/:id", post(controllers::rushee::reschedule_pis).options(|| async { StatusCode::OK }))
+        .route("/rushee/edit-comment/:id", post(controllers::rushee::edit_comment).options(|| async { StatusCode::OK }))
+        .route("/rushee/delete-comment/:id", post(controllers::rushee::delete_comment).options(|| async { StatusCode::OK }))
 
-        .route("/admin/add_pis_question", post(controllers::admin::add_pis_question))
-        .route("/admin/delete_pis_question", post(controllers::admin::delete_pis_question))
-        .route("/admin/get_pis_questions", get(controllers::admin::get_pis_questions))
-        .route("/admin/add_pis_timelsot", post(controllers::admin::add_pis_timeslot))
-        .route("/admin/delete_pis_timeslot", post(controllers::admin::delete_pis_timeslot))
-        .route("/admin/get_pis_timeslots", get(controllers::admin::get_pis_timeslots))
-        .route("/admin/add-rush-night", post(controllers::admin::add_rush_night))
-        .route("/admin/delete_rush_night", post(controllers::admin::delete_rush_night))
+        .route("/admin/add_pis_question", post(controllers::admin::add_pis_question).options(|| async { StatusCode::OK }))
+        .route("/admin/delete_pis_question", post(controllers::admin::delete_pis_question).options(|| async { StatusCode::OK }))
+        .route("/admin/get_pis_questions", get(controllers::admin::get_pis_questions).options(|| async { StatusCode::OK }))
+        .route("/admin/add_pis_timelsot", post(controllers::admin::add_pis_timeslot).options(|| async { StatusCode::OK }))
+        .route("/admin/delete_pis_timeslot", post(controllers::admin::delete_pis_timeslot).options(|| async { StatusCode::OK }))
+        .route("/admin/get_pis_timeslots", get(controllers::admin::get_pis_timeslots).options(|| async { StatusCode::OK }))
+        .route("/admin/add-rush-night", post(controllers::admin::add_rush_night).options(|| async { StatusCode::OK }))
+        .route("/admin/delete_rush_night", post(controllers::admin::delete_rush_night).options(|| async { StatusCode::OK }))
         
         .layer(
             CorsLayer::new()
-                .allow_origin(Any)
-                .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
-                .allow_headers(Any),
+                .allow_origin(Any) // Allow requests from any origin
+                .allow_methods([Method::GET, Method::POST, Method::OPTIONS]) // Allow specific HTTP methods
+                .allow_headers(Any) // Allow any headers, including custom ones like `Authorization`
+                .expose_headers(Any), // Expose specific headers in the browser (optional)
         );
 
     run(app).await
