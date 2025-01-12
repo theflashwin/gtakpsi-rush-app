@@ -4,7 +4,7 @@ export default function SuccessPage({ title, description, link, gtid }) {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(`rush.akpsi.com/rushee/${gtid}/${link}`).then(() => {
+        navigator.clipboard.writeText(`https://rush-app-2024.web.app/rushee/${gtid}/${link}`).then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000); // Reset the copied state after 2 seconds
         });
@@ -45,7 +45,7 @@ export default function SuccessPage({ title, description, link, gtid }) {
             <div className="mt-8 w-full max-w-md p-4 bg-white shadow-lg rounded-lg flex items-center justify-between border-2 border-gray-300">
                 {/* Display the Link */}
                 <div className="flex-grow">
-                    <a className="text-slate-800 font-medium">{`rush.akpsi.com/rushee/${gtid}?code=${link}`}</a>
+                    <a className="text-slate-800 font-medium">{`https://rush-app-2024.web.app/rushee/${gtid}/${link}`}</a>
                 </div>
 
                 {/* Copy Button */}
