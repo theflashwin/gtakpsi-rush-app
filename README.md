@@ -16,7 +16,7 @@ Then:
 
 ### Deploy Frontend Only
 
-```
+```bash
 
 cd client
 npm run deploy
