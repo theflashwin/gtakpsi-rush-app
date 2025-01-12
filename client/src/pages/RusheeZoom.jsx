@@ -297,7 +297,7 @@ export default function RusheeZoom() {
                         <Navbar />
                         <div className="h-10" />
 
-                        <div className="min-h-screen bg-slate-800 py-10 text-gray-100">
+                        <div className="min-h-screen bg-slate-800 py-10 text-gray-100 p-4">
                             {/* Profile Header */}
                             <div className="max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg overflow-hidden">
                                 <div className="flex items-center space-x-6 p-6">

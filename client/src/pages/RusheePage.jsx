@@ -1,23 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import Badges from "../components/Badge";
 import axios from "axios";
+import Webcam from "react-webcam";
 
 import Navbar from "../components/Navbar";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Button from "../components/Button";
+import { FaRegEdit } from "react-icons/fa";
+
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { base64ToBlob } from "../js/image_processing";
 
 export default function RusheePage() {
+
     const { gtid, link } = useParams();
     const [rushee, setRushee] = useState(null); // Stores the current state of the rushee
     const [initialRushee, setInitialRushee] = useState(null); // Stores the initial fetched state
     const [loading, setLoading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [showPreview, setShowPreview] = useState(false)
+    const [image, setImage] = useState()
+
+    const webcamRef = useRef();
+
+    const capture = () => {
+        const screenshot = webcamRef.current.getScreenshot();
+        setShowPreview(true)
+        setImage(screenshot);
+    };
 
     const navigate = useNavigate();
+
     const api = import.meta.env.VITE_API_PREFIX;
-    
+    const aws_access_key_id = import.meta.env.VITE_AWS_ACCESS_KEY_ID
+    const aws_secret_access_key = import.meta.env.VITE_AWS_SECRET_ACCESS_KEY
+
     useEffect(() => {
         async function fetch() {
             await axios
@@ -47,6 +69,92 @@ export default function RusheePage() {
             fetch();
         }
     }, [loading, api, gtid, link, navigate]);
+
+
+    const handlePhotoSubmit = async () => {
+
+        setLoading(true)
+
+        const s3Client = new S3Client({
+            region: "us-east-1",
+            credentials: {
+                accessKeyId: aws_access_key_id,
+                secretAccessKey: aws_secret_access_key,
+            },
+        });
+
+        const s3Key = `${(gtid + new Date().toLocaleString()).replace(/\//g, "")}.jpg`;
+
+        // Prepare the upload parameters
+        const uploadParams = {
+            Bucket: "rush-app-pictures", // S3 bucket name
+            Key: s3Key, // File name
+            Body: base64ToBlob(image), // File content
+            ContentType: image.type, // File MIME type (e.g., image/jpeg)
+        };
+
+        const command = new PutObjectCommand(uploadParams);
+
+        try {
+
+            const response = await s3Client.send(command);
+            const payload = [
+                {
+                    "field": "image_url",
+                    "new_value": `https://rush-app-pictures.s3.us-east-1.amazonaws.com/${s3Key}`,
+                }
+            ]
+
+            await axios.post(`${api}/rushee/update-rushee/${gtid}`, payload)
+            .then((response) => {
+
+                if (response.data.status == "success") {
+
+                    window.location.reload()
+
+                } else {
+
+                    toast.error(`${response.data.message}`, {
+                                            position: "top-center",
+                                            autoClose: 5000,
+                                            hideProgressBar: false,
+                                            closeOnClick: true,
+                                            pauseOnHover: true,
+                                            draggable: true,
+                                            progress: undefined,
+                                            theme: "dark",
+                                        });
+
+                }
+
+            })
+            .catch((error) => {
+
+                toast.error(`Some internal network error occurred`, {
+                                        position: "top-center",
+                                        autoClose: 5000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "dark",
+                                    });
+
+            })
+
+        } catch (error) {
+
+            setErrorTitle("Uh Oh! Something Unexpected Occurred..")
+            setErrorDescription("There was an error uploading your image to the cloud.")
+            navigate(`/error/${errorTitle}/${errorDescription}`)
+            return;
+
+        }
+
+        setLoading(false)
+
+    }
 
     // Handle form submission
     const handleSubmit = async (e) => {
@@ -85,15 +193,15 @@ export default function RusheePage() {
             });
         } catch (err) {
             toast.error(`${err.response?.data?.message || "Failed to update rushee"}`, {
-                                    position: "top-center",
-                                    autoClose: 5000,
-                                    hideProgressBar: false,
-                                    closeOnClick: true,
-                                    pauseOnHover: true,
-                                    draggable: true,
-                                    progress: undefined,
-                                    theme: "dark",
-                                });
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
         }
     };
 
@@ -106,22 +214,104 @@ export default function RusheePage() {
     return (
         <div>
 
-            <Navbar  />
+            <Navbar />
 
             {loading ? (
                 <Loader />
             ) : (
 
                 <div className="min-h-screen bg-slate-800 py-10 text-gray-100">
+                    {/* Modal */}
+                    {isModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div className="bg-transparent p-6 rounded-lg shadow-lg max-w-md w-full relative">
+                                {/* Close Button */}
+                                <button
+                                    onClick={() => {
+                                        setIsModalOpen(!isModalOpen)
+                                    }}
+                                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-xl font-bold"
+                                >
+                                    &times;
+                                </button>
+
+                                <div className="w-96 h-96 bg-gray-800 rounded-lg overflow-hidden shadow-lg flex items-center justify-center">
+                                    {showPreview ? <img
+                                        src={image}
+                                        alt="Captured"
+                                        className="w-96 h-96 rounded-lg shadow-md border border-gray-700"
+                                    /> : <Webcam
+                                        ref={webcamRef}
+                                        audio={false}
+                                        screenshotFormat="image/jpeg"
+                                        className="w-full h-full object-cover"
+                                    />}
+                                </div>
+
+
+                                {showPreview ? <div className="flex flex-row gap-6">
+                                    <button
+                                        onClick={() => {
+                                            setShowPreview(false)
+                                        }}
+                                        className="bg-gradient-to-r mt-3 from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
+                                    >
+                                        Retake Photo
+                                    </button>
+                                    <button
+                                        onClick={handlePhotoSubmit}
+                                        className="bg-gradient-to-r mt-3 from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
+                                    >
+                                        Submit Photo
+                                    </button>
+                                </div> : <button
+                                    onClick={capture}
+                                    className="bg-gradient-to-r mt-3 from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
+                                >
+                                    Take Photo
+                                </button>}
+
+
+                                {/* <h2 className="text-lg font-bold mb-4">Edit Image</h2>
+                                <p className="text-sm text-gray-600 mb-6">
+                                    Add functionality to upload and change the image here.
+                                </p>
+                                <button
+                                    onClick={() => {
+                                        setIsModalOpen(!isModalOpen)
+                                    }}
+                                    className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+                                >
+                                    Close
+                                </button> */}
+
+                            </div>
+                        </div>
+                    )}
                     <div className="h-10" />
                     {/* Rushee Information */}
                     <div className="max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg overflow-hidden">
-                        <div className="flex items-center space-x-6 p-6">
-                            <img
-                                src={initialRushee.image_url}
-                                alt={`${initialRushee.first_name} ${initialRushee.last_name}`}
-                                className="w-44 h-44 rounded-lg object-cover border-2 border-slate-600"
-                            />
+                        <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 p-6">
+                            {/* Image with Edit Icon */}
+                            <div className="relative">
+                                <img
+                                    src={initialRushee.image_url}
+                                    alt={`${initialRushee.first_name} ${initialRushee.last_name}`}
+                                    className="w-40 h-40 rounded-lg object-cover border-2 border-slate-600"
+                                />
+                                {/* Edit Icon */}
+                                <button
+                                    onClick={() => {
+                                        setIsModalOpen(true)
+                                    }}
+                                    className="absolute top-2 text-center right-2 bg-gray-800 text-white pl-2.5 pr-2 pt-2 pb-2.5 rounded-full hover:bg-blue-500 transition duration-200"
+                                    aria-label="Edit Image"
+                                >
+                                    <FaRegEdit />
+                                </button>
+                            </div>
+
+                            {/* Rushee Details */}
                             <div>
                                 <div className="flex flex-row gap-2 items-center">
                                     <h1 className="text-3xl font-bold">
@@ -140,12 +330,13 @@ export default function RusheePage() {
                         </div>
                     </div>
 
+
                     <div className="mt-10 max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg p-6">
-                    <h2 className="text-xl font-semibold text-gray-200">PIS Details</h2>
-                                <p className="mt-2 text-slate-300">
-                                    🕒 Timeslot:{" "}
-                                    {new Date(parseInt(initialRushee.pis_timeslot.$date.$numberLong)).toUTCString()}
-                                </p>
+                        <h2 className="text-xl font-semibold text-gray-200">PIS Details</h2>
+                        <p className="mt-2 text-slate-300">
+                            🕒 Timeslot:{" "}
+                            {new Date(parseInt(initialRushee.pis_timeslot.$date.$numberLong)).toUTCString()}
+                        </p>
                     </div>
 
                     {/* Form Section */}

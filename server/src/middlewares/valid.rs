@@ -23,7 +23,7 @@ pub fn get_rushee_edit_fields() -> HashSet<String> {
     result.insert("major".to_string());
     result.insert("class".to_string());
     result.insert("pronouns".to_string());
-
+    result.insert("image_url".to_string());
 
     return result;
 
