@@ -25,6 +25,7 @@ pub struct StrippedRushee {
     pub class: String,
     pub email: String,
     pub pronouns: String,
+    pub attendance: Vec<RushNight>
 }
 
 #[derive(Debug, Serialize, Deserialize)]

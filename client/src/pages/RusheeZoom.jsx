@@ -6,12 +6,12 @@ import dayjs from 'dayjs';
 import Navbar from "../components/Navbar";
 import { verifyUser } from "../js/verifications";
 import Loader from "../components/Loader";
-import Badges from "../components/Badge";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { FaEdit, FaTrash } from "react-icons/fa";
+import Badges from "../components/Badge";
 
 
 export default function RusheeZoom() {
@@ -104,7 +104,7 @@ export default function RusheeZoom() {
 
     const handleSubmitComment = async () => {
         setLoading(true)
-        
+
         const actualRatings = []
 
         for (const rating in ratings) {
@@ -473,9 +473,13 @@ export default function RusheeZoom() {
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <p>
-                                                    <strong className="text-gray-200">{comment.brother_name}:</strong> {comment.comment}
-                                                </p>
+                                                <div>
+                                                    <Badges text={comment.night.name} />
+                                                    <div className="h-1" />
+                                                    <p>
+                                                        <strong className="text-gray-200">{comment.brother_name}:</strong> {comment.comment}
+                                                    </p>
+                                                </div>
                                             )}
 
                                             <div className="flex flex-wrap gap-2 mt-2">

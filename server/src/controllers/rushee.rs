@@ -168,6 +168,7 @@ pub async fn get_rushees() -> Result<Json<Value>, StatusCode> {
                             image_url: doc.image_url,
                             email: doc.email,
                             pronouns: doc.pronouns,
+                            attendance: doc.attendance,
                         })
                     }
                     Err(err) => {

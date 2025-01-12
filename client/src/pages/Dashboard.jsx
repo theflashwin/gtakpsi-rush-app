@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+
 import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+
 import Error from "../components/Error";
 import Loader from "../components/Loader";
+import Badges from "../components/Badge";
+
 import Fuse from "fuse.js";
 
 import { verifyUser } from "../js/verifications";
@@ -41,6 +46,9 @@ export default function Dashboard(props) {
                             if (response.data.status === "success") {
                                 setRushees(response.data.payload);
                                 setFilteredRushees(response.data.payload);
+
+                                console.log(response.data.payload)
+
                             } else {
                                 setErrorDescription("There was some issue fetching the rushees");
                                 setError(true);
@@ -90,42 +98,75 @@ export default function Dashboard(props) {
                     {loading ? (
                         <Loader />
                     ) : (
-                        <div className="h-screen w-screen bg-slate-800">
+                        <div className="h-screen w-screen bg-slate-800 overflow-y-scroll">
                             <Navbar />
 
                             <div className="pt-20 p-4"> {/* Adjusted padding to account for Navbar */}
-                                <input
-                                    type="text"
-                                    value={query}
-                                    onChange={handleSearch} // Trigger search on every key press
-                                    placeholder="Search rushees..."
-                                    className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-
-                                <div className="grid gap-4 mt-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                                    {filteredRushees.map((rushee) => (
-                                        <div
-                                            key={rushee.id}
-                                            className="p-4 bg-slate-700 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex border-2 border-white hover:border-blue-500"
-                                        >
-                                            {/* Picture Placeholder */}
-                                            <img className="w-56 h-56 rounded-lg object-cover" src={rushee.image_url} alt="Rushee" />
-
-                                            {/* Rushee Info */}
-                                            <div onClick={() => {
-                                                navigate(`/brother/rushee/${rushee.gtid}`)
-                                            }} className="w-2/3 pl-4">
-                                                <h2 className="text-2xl font-bold text-white">
-                                                    {rushee.name}
-                                                </h2>
-                                                <p className="text-lg text-gray-300">{rushee.email}</p>
-                                                <p className="text-lg text-gray-300">{rushee.major}</p>
-                                                <p className="text-lg text-gray-300">GTID: {rushee.gtid}</p>
- 
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="container mx-auto px-4">
+                                    {/* Search Bar */}
+                                    <input
+                                        type="text"
+                                        value={query}
+                                        onChange={handleSearch}
+                                        placeholder="Search rushees..."
+                                        className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-700 text-white placeholder-gray-400"
+                                    />
                                 </div>
+
+                                <div className="container mx-auto px-4">
+                                    <div className="grid gap-6 mt-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                                        {filteredRushees.map((rushee) => (
+                                            <div
+                                                key={rushee.id}
+                                                className="flex flex-col bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border-2 border-transparent hover:border-blue-500"
+                                            >
+                                                {/* Picture */}
+                                                <img
+                                                    className="w-full h-48 object-cover"
+                                                    src={rushee.image_url}
+                                                    alt={rushee.name}
+                                                />
+
+                                                {/* Content */}
+                                                <div
+                                                    onClick={() => {
+                                                        navigate(`/brother/rushee/${rushee.gtid}`);
+                                                    }}
+                                                    className="flex flex-col flex-grow p-4"
+                                                >
+                                                    <div className="flex flex-row gap-4">
+
+                                                        <h2 className="text-xl font-bold text-white mb-2 truncate">
+                                                            {rushee.name}
+                                                        </h2>
+                                                        {rushee.attendance.map((event, idx) => (
+                                                            <Badges text={event.name} key={idx} />
+                                                        ))}
+
+                                                    </div>
+                                                    <p className="text-sm text-gray-400 mb-1 truncate">
+                                                        {rushee.email}
+                                                    </p>
+                                                    <p className="text-sm text-gray-400 mb-1 truncate">
+                                                        {rushee.major}
+                                                    </p>
+                                                    <p className="text-sm text-gray-400">GTID: {rushee.gtid}</p>
+                                                    <div className="flex flex-wrap gap-2 mt-2">
+                                                        {rushee.ratings.map((rating, rIdx) => (
+                                                            <span
+                                                                key={rIdx}
+                                                                className="bg-slate-500 text-gray-200 px-2 py-1 rounded text-sm"
+                                                            >
+                                                                {rating.name}: {rating.value}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     )}
