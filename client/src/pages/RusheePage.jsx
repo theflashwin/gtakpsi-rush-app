@@ -337,6 +337,11 @@ export default function RusheePage() {
                             🕒 Timeslot:{" "}
                             {new Date(parseInt(initialRushee.pis_timeslot.$date.$numberLong)).toUTCString()}
                         </p>
+                        <div onClick={() => {
+                            console.log("fill this in later")
+                        }}>
+                            <Button text={"Reschedule"} />
+                        </div>
                     </div>
 
                     {/* Form Section */}

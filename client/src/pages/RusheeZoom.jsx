@@ -177,7 +177,7 @@ export default function RusheeZoom() {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(`rush.akpsi.com/rushee/${gtid}/${rushee.access_code}`).then(() => {
+        navigator.clipboard.writeText(`https://rush-app-2024.web.app/rushee/${gtid}/${rushee.access_code}`).then(() => {
             setCopied(true);
             setTimeout(() => setCopied(false), 2000); // Reset the copied state after 2 seconds
         });
@@ -324,10 +324,10 @@ export default function RusheeZoom() {
                                 </div>
                             </div>
 
-                            <div onClick={() => {
-                                navigate(`/pis/${gtid}`)
-                            }} className="max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg mt-6 p-6 grid grid-cols-2 gap-6">
-                                <div className="cursor-pointer flex items-center justify-center bg-slate-400 h-12 w-full rounded-lg bg-gradient-to-r from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
+                            <div className="max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg mt-6 p-6 grid grid-cols-2 gap-6">
+                                <div onClick={() => {
+                                    navigate(`/pis/${gtid}`)
+                                }} className="cursor-pointer flex items-center justify-center bg-slate-400 h-12 w-full rounded-lg bg-gradient-to-r from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
                                     Submit PIS
                                 </div>
                                 <div onClick={handleCopy} className="cursor-pointer flex items-center justify-center bg-slate-400 h-12 w-full rounded-lg bg-gradient-to-r from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 focus:ring transform transition hover:scale-105 duration-300 ease-in-out">

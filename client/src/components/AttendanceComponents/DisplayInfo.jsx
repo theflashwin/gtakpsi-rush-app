@@ -22,9 +22,6 @@ export default function DisplayInfo(props) {
                                 <h1 className="text-3xl font-bold">
                                     {initialRushee.first_name} {initialRushee.last_name}
                                 </h1>
-                                {initialRushee.attendance.map((event, idx) => (
-                                    <Badges text={event.name} key={idx} />
-                                ))}
                             </div>
                             <p className="text-slate-300">Pronouns: {initialRushee.pronouns}</p>
                             <p className="text-slate-300">Major: {initialRushee.major}</p>
