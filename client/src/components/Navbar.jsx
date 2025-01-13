@@ -30,12 +30,18 @@ export default function Navbar(props) {
                             <li>
                                 <a href="/dashboard" class="block py-2 px-3 text-whit rounded md:bg-transparent md:p-0 dark:text-white" aria-current="page">Dashboard</a>
                             </li>
+                            <li>
+                                <a href="/attendance" class="block py-2 px-3 text-whit rounded md:bg-transparent md:p-0 dark:text-white" aria-current="page">Attendance</a>
+                            </li>
+                            <li>
+                                <a href="/admin" class="block py-2 px-3 text-whit rounded md:bg-transparent md:p-0 dark:text-white" aria-current="page">Admin</a>
+                            </li>
 
                             {/* {verifyIsAdmin() ?<li>
                                 <a href="/admin" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-white ">Admin Dashboard</a>
                             </li>: <></>} */}
                             <li>
-                                <a href="https://forms.gle/HcCz2NrjBbMAA9VC8" target="_blank" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-whit">Report a Bug</a>
+                                <a href="https://docs.google.com/spreadsheets/d/1yMFMzfbZ2mAe3YkMMSJa6vVkeiWfVc6nBnloVXicS8g/edit?gid=0#gid=0" target="_blank" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-whit">Report a Bug</a>
                             </li>
                             {verifyUser() ? <li>
                                 <p onClick={() => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Loader from '../components/Loader'
 import SplashPage from "../components/AttendanceComponents/SplashPage";
@@ -6,9 +6,11 @@ import SplashPage from "../components/AttendanceComponents/SplashPage";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { verifyGTID } from "../js/verifications";
+import { verifyUser } from "../js/verifications";
 import axios from "axios";
 import DisplayInfo from "../components/AttendanceComponents/DisplayInfo";
 import SuccessPage from "../components/AttendanceComponents/SuccessPage";
+import { useNavigate } from "react-router-dom";
 
 export default function Attendance() {
 
@@ -18,6 +20,49 @@ export default function Attendance() {
     const [rushee, setRushee] = useState()
 
     const api = import.meta.env.VITE_API_PREFIX;
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        async function fetch() {
+            setLoading(true);
+            await verifyUser()
+                .then(async (response) => {
+                    if (response === false) {
+                        navigate("/");
+                    }
+
+                    await axios
+                        .get(`${api}/rushee/get-rushees`)
+                        .then((response) => {
+                            if (response.data.status === "success") {
+                                setRushees(response.data.payload);
+                                setFilteredRushees(response.data.payload);
+
+                                console.log(response.data.payload)
+
+                            } else {
+                                setErrorDescription("There was some issue fetching the rushees");
+                                setError(true);
+                            }
+                        })
+                        .catch(() => {
+                            setErrorDescription("There was some network error while fetching the rushees.");
+                            setError(true);
+                        });
+                })
+                .catch(() => {
+                    setErrorDescription("There was an error verifying your credentials.");
+                    setError(true);
+                });
+
+            setLoading(false);
+        }
+
+        if (loading === true) {
+            fetch();
+        }
+    }, [loading, navigate]);
 
     const handleSubmit = async () => {
 
