@@ -14,6 +14,7 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { base64ToBlob } from "../js/image_processing";
 import Error from "../components/Error";
 import { useNavigate } from "react-router-dom";
+import { verifyInfo } from "../js/verifications";
 
 export default function Register() {
 
@@ -76,7 +77,9 @@ export default function Register() {
     ]
 
     // submit button behaviors
-    const basic_info_submit = () => {
+    const basic_info_submit = async () => {
+
+        setCurrLoading(true)
 
         for (const info of basic_info) {
 
@@ -96,18 +99,58 @@ export default function Register() {
 
         }
 
-        setFirstnameVal(firstname.current?.value)
-        setLastnameVal(lastname.current?.value)
-        setEmailVal(email.current?.value)
-        setHousingVal(housing.current?.value)
-        setPhoneVal(phone.current?.value)
-        setGtidVal(gtid.current?.value)
-        setMajorVal(major.current?.value)
-        setPronounsVal(pronouns.current?.value)
-        setYearVal(year.current?.value)
-        setExposureVal(exposure.current?.value)
+        await verifyInfo(gtid.current?.value, email.current?.value)
+            .then((response) => {
 
-        setPage(1)
+                if (response.status === "success") {
+
+                    setFirstnameVal(firstname.current?.value)
+                    setLastnameVal(lastname.current?.value)
+                    setEmailVal(email.current?.value)
+                    setHousingVal(housing.current?.value)
+                    setPhoneVal(phone.current?.value)
+                    setGtidVal(gtid.current?.value)
+                    setMajorVal(major.current?.value)
+                    setPronounsVal(pronouns.current?.value)
+                    setYearVal(year.current?.value)
+                    setExposureVal(exposure.current?.value)
+
+                    setPage(1)
+
+                } else {
+
+                    toast.warn(`${response.message}`, {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: false,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+
+                }
+
+            })
+            .catch((error) => {
+
+                console.log(error)
+
+                toast.warn(`Some internal error occurred`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+
+            })
+
+        setCurrLoading(false)
     }
 
     const image_submit = () => {
@@ -176,7 +219,7 @@ export default function Register() {
         try {
             await axios.post(`${api}/rushee/signup`, payload)
                 .then((response) => {
-                    
+
                     if (response.data.status === "error") {
                         navigate(`/error/${errorTitle}/${errorDescription}`)
                     } else if (response.data.status === "success") {

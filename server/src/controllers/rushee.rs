@@ -158,7 +158,6 @@ pub async fn get_rushees() -> Result<Json<Value>, StatusCode> {
             while let Some(rushee) = cursor.next().await {
                 match rushee {
                     Ok(doc) => {
-                        println!("{}", doc.first_name);
                         rushees.push(StrippedRushee {
                             name: format!("{} {}", doc.first_name, doc.last_name),
                             class: doc.class,
@@ -827,4 +826,32 @@ pub async fn edit_comment(
     }
 
 
+}
+
+pub async fn does_rushee_exist(Path(id): Path<String>) -> Result<Json<Value>, StatusCode> {
+
+    let connection = db::get_rushee_client();
+
+    let result = connection.find_one(doc! {"gtid": id.clone()}).await;
+
+    match result {
+        Ok(insert_result) => match insert_result {
+            Some(rushee) => Ok(Json(
+                (json!({
+                    "status": "error",
+                    "message": format!("exists")
+                })),
+            )),
+
+            None => Ok(Json(json!({
+                "status": "success",
+                "message": format!("Rushee with GTID {} does not exist", id)
+            }))),
+        },
+
+        Err(err) => Ok(Json(json!({
+            "status": "error",
+            "message": "Some network error occurred when checking if the rushee exists or not"
+        }))),
+    }
 }
