@@ -117,6 +117,9 @@ export default function Dashboard(props) {
                                     <div className="grid gap-6 mt-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                                         {filteredRushees.map((rushee) => (
                                             <div
+                                                onClick={() => {
+                                                    navigate(`/brother/rushee/${rushee.gtid}`);
+                                                }}
                                                 key={rushee.id}
                                                 className="flex flex-col bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border-2 border-transparent hover:border-blue-500"
                                             >
@@ -128,12 +131,7 @@ export default function Dashboard(props) {
                                                 />
 
                                                 {/* Content */}
-                                                <div
-                                                    onClick={() => {
-                                                        navigate(`/brother/rushee/${rushee.gtid}`);
-                                                    }}
-                                                    className="flex flex-col flex-grow p-4"
-                                                >
+                                                <div className="flex flex-col flex-grow p-4">
                                                     <div className="flex flex-row gap-4">
 
                                                         <h2 className="text-xl font-bold text-white mb-2 truncate">
