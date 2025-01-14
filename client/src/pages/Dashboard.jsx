@@ -121,7 +121,7 @@ export default function Dashboard(props) {
                                                     navigate(`/brother/rushee/${rushee.gtid}`);
                                                 }}
                                                 key={rushee.id}
-                                                className="flex flex-col bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border-2 border-transparent hover:border-blue-500"
+                                                className="flex cursor-pointer flex-col bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border-2 border-transparent hover:border-blue-500"
                                             >
                                                 {/* Picture */}
                                                 <img
