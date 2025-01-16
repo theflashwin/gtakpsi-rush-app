@@ -9,11 +9,13 @@ import Navbar from "../components/Navbar";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import Button from "../components/Button";
 import { FaRegEdit } from "react-icons/fa";
 
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { base64ToBlob } from "../js/image_processing";
+import { verifyInfo } from "../js/verifications";
 
 export default function RusheePage() {
 
@@ -106,42 +108,42 @@ export default function RusheePage() {
             ]
 
             await axios.post(`${api}/rushee/update-rushee/${gtid}`, payload)
-            .then((response) => {
+                .then((response) => {
 
-                if (response.data.status == "success") {
+                    if (response.data.status == "success") {
 
-                    window.location.reload()
+                        window.location.reload()
 
-                } else {
+                    } else {
 
-                    toast.error(`${response.data.message}`, {
-                                            position: "top-center",
-                                            autoClose: 5000,
-                                            hideProgressBar: false,
-                                            closeOnClick: true,
-                                            pauseOnHover: true,
-                                            draggable: true,
-                                            progress: undefined,
-                                            theme: "dark",
-                                        });
+                        toast.error(`${response.data.message}`, {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "dark",
+                        });
 
-                }
+                    }
 
-            })
-            .catch((error) => {
+                })
+                .catch((error) => {
 
-                toast.error(`Some internal network error occurred`, {
-                                        position: "top-center",
-                                        autoClose: 5000,
-                                        hideProgressBar: false,
-                                        closeOnClick: true,
-                                        pauseOnHover: true,
-                                        draggable: true,
-                                        progress: undefined,
-                                        theme: "dark",
-                                    });
+                    toast.error(`Some internal network error occurred`, {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
 
-            })
+                })
 
         } catch (error) {
 
@@ -158,10 +160,20 @@ export default function RusheePage() {
 
     // Handle form submission
     const handleSubmit = async (e) => {
+
         e.preventDefault();
 
         if (!rushee || !initialRushee) {
-            alert("Unable to process changes.");
+            toast.error(`${"Unable to parse changes"}`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
             return;
         }
 
@@ -174,14 +186,7 @@ export default function RusheePage() {
             }));
 
         if (payload.length === 0) {
-            alert("No changes were made.");
-            return;
-        }
-
-        try {
-            const response = await axios.post(`${api}/rushee/update-rushee/${gtid}`, payload);
-            console.log(response);
-            toast.success(`${response.data.message || "Rushee updated successfully!"}`, {
+            toast.info(`${"No changes were made"}`, {
                 position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -191,6 +196,66 @@ export default function RusheePage() {
                 progress: undefined,
                 theme: "dark",
             });
+            return;
+        }
+
+        try {
+
+            const checkValidity = await verifyInfo(rushee["gtid"], rushee["email"], rushee["phone_number"], rushee["gtid"] !== initialRushee["gtid"])
+
+            console.log(checkValidity)
+
+            if (checkValidity.status === "error") {
+
+                toast.error(`${checkValidity.message}`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+
+                return;
+
+            }
+
+        } catch (err) {
+            console.log(err)
+            toast.error(`${"Failed to update rushee"}`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return;
+        }
+
+        try {
+            const response = await axios.post(`${api}/rushee/update-rushee/${gtid}`, payload);
+            console.log(response);
+            
+            if (response.data.status === "success") {
+                toast.success(`Updated all fields! If you changed your GTID, your new edit page link is /rushee/${rushee.gtid}/${link}`)
+            } else {
+                toast.error(`${response.data.message}`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+            }
+
         } catch (err) {
             toast.error(`${err.response?.data?.message || "Failed to update rushee"}`, {
                 position: "top-center",
@@ -223,7 +288,7 @@ export default function RusheePage() {
                 <div className="min-h-screen bg-slate-800 py-10 text-gray-100">
                     {/* Modal */}
                     {isModalOpen && (
-                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-0">
                             <div className="bg-transparent p-6 rounded-lg shadow-lg max-w-md w-full relative">
                                 {/* Close Button */}
                                 <button

@@ -99,7 +99,7 @@ export default function Register() {
 
         }
 
-        await verifyInfo(gtid.current?.value, email.current?.value)
+        await verifyInfo(gtid.current?.value, email.current?.value, phone.current?.value, true)
             .then((response) => {
 
                 if (response.status === "success") {

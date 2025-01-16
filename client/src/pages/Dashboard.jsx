@@ -12,6 +12,7 @@ import Badges from "../components/Badge";
 import Fuse from "fuse.js";
 
 import { verifyUser } from "../js/verifications";
+import Button from "../components/Button";
 
 export default function Dashboard(props) {
     const [user, setUser] = useState(
@@ -36,6 +37,13 @@ export default function Dashboard(props) {
 
     const api = import.meta.env.VITE_API_PREFIX;
 
+    function shuffleArray(array) {
+        return array
+            .map((value) => ({ value, sort: Math.random() }))
+            .sort((a, b) => a.sort - b.sort)
+            .map(({ value }) => value);
+    }
+
     useEffect(() => {
         async function fetch() {
             setLoading(true);
@@ -49,8 +57,10 @@ export default function Dashboard(props) {
                         .get(`${api}/rushee/get-rushees`)
                         .then((response) => {
                             if (response.data.status === "success") {
-                                setRushees(response.data.payload);
-                                setFilteredRushees(response.data.payload);
+
+                                const shuffledRushees = shuffleArray(response.data.payload); // Shuffle the array
+                                setRushees(shuffledRushees);
+                                setFilteredRushees(shuffledRushees);
 
                                 console.log(response.data.payload)
 
@@ -96,17 +106,17 @@ export default function Dashboard(props) {
 
     const handleFilters = () => {
         let filtered = rushees;
-    
+
         // Filter by major
         if (selectedMajor !== "All") {
             filtered = filtered.filter((rushee) => rushee.major === selectedMajor);
         }
-    
+
         // Filter by class
         if (selectedClass !== "All") {
             filtered = filtered.filter((rushee) => rushee.class === selectedClass);
         }
-    
+
         // Filter by query
         if (query.trim() !== "") {
             const fuzzyResults = fuse.search(query);
@@ -114,10 +124,10 @@ export default function Dashboard(props) {
                 fuzzyResults.some((result) => result.item.id === rushee.id)
             );
         }
-    
+
         setFilteredRushees(filtered);
     };
-    
+
     useEffect(() => {
         handleFilters();
     }, [query, selectedMajor, selectedClass]);
@@ -145,43 +155,54 @@ export default function Dashboard(props) {
                                         className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-700 text-white placeholder-gray-400"
                                     />
 
-                                    <div className="flex flex-wrap gap-4 mt-4">
-                                        {/* Major Filter */}
-                                        <div className="relative">
-                                            <select
-                                                value={selectedMajor}
-                                                onChange={(e) => setSelectedMajor(e.target.value)}
-                                                className="p-3 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-700 text-white appearance-none"
-                                            >
-                                                <option value="All">All Majors</option>
-                                                {Array.from(new Set(rushees.map((rushee) => rushee.major))).map((major, idx) => (
-                                                    <option key={idx} value={major}>
-                                                        {major}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
-                                                ▼
-                                            </span>
+                                    <div className="flex items-center justify-between mt-4">
+                                        {/* Filters Group (Aligned to the Left) */}
+                                        <div className="flex flex-wrap gap-4">
+                                            {/* Major Filter */}
+                                            <div className="relative">
+                                                <select
+                                                    value={selectedMajor}
+                                                    onChange={(e) => setSelectedMajor(e.target.value)}
+                                                    className="p-3 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-700 text-white appearance-none"
+                                                >
+                                                    <option value="All">All Majors</option>
+                                                    {Array.from(new Set(rushees.map((rushee) => rushee.major))).map((major, idx) => (
+                                                        <option key={idx} value={major}>
+                                                            {major}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
+                                                    ▼
+                                                </span>
+                                            </div>
+
+                                            {/* Class Filter */}
+                                            <div className="relative">
+                                                <select
+                                                    value={selectedClass}
+                                                    onChange={(e) => setSelectedClass(e.target.value)}
+                                                    className="p-3 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-700 text-white appearance-none"
+                                                >
+                                                    <option value="All">All Classes</option>
+                                                    {Array.from(new Set(rushees.map((rushee) => rushee.class))).map((classYear, idx) => (
+                                                        <option key={idx} value={classYear}>
+                                                            {classYear}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
+                                                    ▼
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        {/* Class Filter */}
-                                        <div className="relative">
-                                            <select
-                                                value={selectedClass}
-                                                onChange={(e) => setSelectedClass(e.target.value)}
-                                                className="p-3 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-700 text-white appearance-none"
-                                            >
-                                                <option value="All">All Classes</option>
-                                                {Array.from(new Set(rushees.map((rushee) => rushee.class))).map((classYear, idx) => (
-                                                    <option key={idx} value={classYear}>
-                                                        {classYear}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
-                                                ▼
-                                            </span>
+                                        {/* Shuffle Button (Aligned to the Right) */}
+                                        <div onClick={() => {
+                                                const shuffled = shuffleArray(rushees);
+                                                setFilteredRushees(shuffled);
+                                            }}>
+                                            <Button text={"Shuffle Rushees"} />
                                         </div>
                                     </div>
 

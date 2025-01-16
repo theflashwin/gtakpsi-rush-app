@@ -3,102 +3,175 @@ import React from "react";
 export default function BasicInfo(props) {
 
     return (
-        <div>
-            <h1 className="mb-2 text-left font-bold bg-gradient-to-r from-sky-700 via-amber-600 to-sky-700 animate-text bg-clip-text text-transparent text-4xl">Basic Info</h1>
-            <h1 className="text-slate-500 text-left mb-4">First, let's get some basic information about you!</h1>
-            <form class="text-left w-full max-w-lg">
-                <div class="flex flex-wrap -mx-3 mb-2">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-first-name">
+        <div className="mt-16 p-4">
+            <h1 className="mb-2 text-left font-bold bg-gradient-to-r from-sky-700 via-amber-600 to-sky-700 animate-text bg-clip-text text-transparent text-4xl">
+                Basic Info
+            </h1>
+            <h1 className="text-slate-500 text-left mb-4">
+                First, let's get some basic information about you!
+            </h1>
+            <form className="text-left w-full max-w-lg mx-auto">
+                {/* Row 1: First and Last Name */}
+                <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full sm:w-1/2 px-3 mb-4 sm:mb-0">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-first-name">
                             First Name
                         </label>
-                        <input ref={props.firstname} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none" id="grid-first-name" type="text" placeholder="George" />
+                        <input
+                            ref={props.firstname}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-first-name"
+                            type="text"
+                            placeholder="George"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2 px-3">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-last-name">
+                    <div className="w-full sm:w-1/2 px-3">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-last-name">
                             Last Name
                         </label>
-                        <input ref={props.lastname} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:border-gray-500" id="grid-last-name" type="text" placeholder="Burdell" />
+                        <input
+                            ref={props.lastname}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-last-name"
+                            type="text"
+                            placeholder="Burdell"
+                        />
                     </div>
                 </div>
-                <div class="flex flex-wrap -mx-3 mb-2">
-                    <div class="w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-password">
-                            Email
+
+                {/* Row 2: Email */}
+                <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full px-3">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-email">
+                            GT Email
                         </label>
-                        <input ref={props.email} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="grid-password" placeholder="gburdell3@gatech.edu" />
+                        <input
+                            ref={props.email}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-email"
+                            type="email"
+                            placeholder="gburdell3@gatech.edu"
+                        />
                     </div>
                 </div>
-                <div class="flex flex-wrap -mx-3 mb-2">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-first-name">
+
+                {/* Row 3: Housing and Phone */}
+                <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full sm:w-1/2 px-3 mb-4 sm:mb-0">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-housing">
                             Housing
                         </label>
-                        <input ref={props.housing} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none" id="grid-first-name" type="text" placeholder="Glenn 346" />
+                        <input
+                            ref={props.housing}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-housing"
+                            type="text"
+                            placeholder="Glenn 346"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2 px-3">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-last-name">
+                    <div className="w-full sm:w-1/2 px-3">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-phone">
                             Phone
                         </label>
-                        <input ref={props.phone} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:border-gray-500" id="grid-last-name" type="text" placeholder="1111111111" />
+                        <input
+                            ref={props.phone}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-phone"
+                            type="tel"
+                            placeholder="1111111111"
+                        />
                     </div>
                 </div>
-                <div class="flex flex-wrap -mx-3 mb-2">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-first-name">
+
+                {/* Row 4: GTID and Major */}
+                <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full sm:w-1/2 px-3 mb-4 sm:mb-0">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-gtid">
                             GTID
                         </label>
-                        <input ref={props.gtid} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none" id="grid-first-name" type="text" placeholder="903753779" />
+                        <input
+                            ref={props.gtid}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-gtid"
+                            type="text"
+                            placeholder="903753779"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2 px-3">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-last-name">
+                    <div className="w-full sm:w-1/2 px-3">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-major">
                             Major
                         </label>
-                        <input ref={props.major} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:border-gray-500" id="grid-last-name" type="text" placeholder="Biochemistry" />
+                        <input
+                            ref={props.major}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-major"
+                            type="text"
+                            placeholder="Biochemistry"
+                        />
                     </div>
                 </div>
-                
-                <div class="flex flex-wrap -mx-3 mb-4">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-city">
+
+                {/* Row 5: Pronouns and Year */}
+                <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full sm:w-1/2 px-3 mb-4 sm:mb-0">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-pronouns">
                             Pronouns
                         </label>
-                        <input ref={props.pronouns} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight " id="grid-city" type="text" placeholder="she/her" />
+                        <input
+                            ref={props.pronouns}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-pronouns"
+                            type="text"
+                            placeholder="she/her"
+                        />
                     </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-state">
+                    <div className="w-full sm:w-1/2 px-3">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-year">
                             Year
                         </label>
-                        <div class="relative">
-                            <select ref={props.year} class="block appearance-none w-full bg-gray-700 text-gray-200 py-3 px-4 pr-8 rounded leading-tight " id="grid-state">
-                                <option>First</option>
-                                <option>Second</option>
-                                <option>Third</option>
-                                <option>Fourth</option>
-                                <option>Fifth+</option>
-                            </select>
-                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-200">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-                            </div>
-                        </div>
+                        <select
+                            ref={props.year}
+                            className="block appearance-none w-full bg-gray-700 text-gray-200 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-year"
+                        >
+                            <option>First</option>
+                            <option>Second</option>
+                            <option>Third</option>
+                            <option>Fourth</option>
+                            <option>Fifth+</option>
+                        </select>
                     </div>
                 </div>
-                <div class="flex flex-wrap -mx-3 mb-2">
-                    <div class="w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" for="grid-password">
+
+                {/* Row 6: Exposure */}
+                <div className="flex flex-wrap -mx-3 mb-4">
+                    <div className="w-full px-3">
+                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-exposure">
                             How did you find us?
                         </label>
-                        <input ref={props.exposure} class="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:border-gray-500" id="grid-password" placeholder="Word of Mouth, Tabling Event, etc.." />
+                        <input
+                            ref={props.exposure}
+                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-exposure"
+                            type="text"
+                            placeholder="Word of Mouth, Tabling Event, etc.."
+                        />
                     </div>
                 </div>
-                <button
-                    onClick={props.func}
-                    class="bg-gradient-to-r mt-3 from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
-                    type="button"
-                >Submit</button>
 
+                {/* Submit Button */}
+                <div className="flex justify-center">
+                    <button
+                        onClick={props.func}
+                        className="bg-gradient-to-r mt-3 from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
+                        type="button"
+                    >
+                        Submit
+                    </button>
+                </div>
             </form>
         </div>
+
     )
 
 }

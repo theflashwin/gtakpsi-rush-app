@@ -58,7 +58,7 @@ export function verifyGTID(gtid) {
  * @param String email
  * @returns Status and Error JSON
  */
-export async function verifyInfo(gtid, email) {
+export async function verifyInfo(gtid, email, phone, isNewGTID) {
 
     // verify gtid is 9 digits
     // check length
@@ -70,6 +70,13 @@ export async function verifyInfo(gtid, email) {
         };
     }
 
+    if (phone.length != 10) {
+        return {
+            "status": "error",
+            "message": "Phone Number must be 10 digits long"
+        };
+    }
+
     // verify its all numbers
     if (!/^[0-9]+$/.test(gtid)) {
         return {
@@ -78,17 +85,23 @@ export async function verifyInfo(gtid, email) {
         };
     }
 
-    const valid_email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    const valid_email_regex = /^[^\s@]+@gatech\.edu$/;
 
     // verify valid email
     if (!valid_email_regex.test(email)) {
         return {
             "status": "error",
-            "message": "Email is invalid"
+            "message": "Email must be a valid Georgia Tech Email Address"
         };
     }
 
     // verify if GTID exists already 
+
+    if (!isNewGTID) {
+        return {
+            status: "success",
+        };
+    }
 
     try {
         const response = await axios.get(`${api}/rushee/does-rushee-exist/${gtid}`);

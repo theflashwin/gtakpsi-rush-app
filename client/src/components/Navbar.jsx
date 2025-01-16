@@ -34,7 +34,7 @@ export default function Navbar(props) {
                                 <a href="/attendance" class="block py-2 px-3 text-whit rounded md:bg-transparent md:p-0 dark:text-white" aria-current="page">Attendance</a>
                             </li>
                             <li>
-                                <a href="/admin" class="block py-2 px-3 text-whit rounded md:bg-transparent md:p-0 dark:text-white" aria-current="page">Admin</a>
+                                <a href="/brother/pis" class="block py-2 px-3 text-whit rounded md:bg-transparent md:p-0 dark:text-white" aria-current="page">PIS</a>
                             </li>
 
                             {/* {verifyIsAdmin() ?<li>

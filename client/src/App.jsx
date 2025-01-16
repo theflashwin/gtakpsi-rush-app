@@ -25,7 +25,7 @@ function App() {
 
   return (
 
-    <div className='m-0 p-0 h-screen w-screen overflow-y-scroll'>
+    <div className='m-0 p-0 h-screen w-screen overflow-y-scroll no-scrollbar'>
 
       <BrowserRouter>
 
@@ -42,8 +42,6 @@ function App() {
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />
           <Route path='/brother/pis' element={<BrotherPIS/>} />
-
-          <Route path='/playground' element={<PisSignUp/>} />
 
         </Routes>
 

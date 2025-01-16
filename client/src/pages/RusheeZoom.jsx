@@ -357,11 +357,19 @@ export default function RusheeZoom() {
                             </div>
 
                             {/* PIS Responses */}
-                            <div className="max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg mt-6 p-6">
+                            <div className="max-w-4xl max-h-[40rem] mx-auto bg-slate-700 shadow-lg rounded-lg mt-6 p-6 overflow-y-scroll no-scrollbar">
                                 <h2 className="text-xl font-semibold text-gray-200">PIS Details</h2>
                                 <p className="mt-2 text-slate-300">
                                     🕒 Timeslot:{" "}
                                     {new Date(parseInt(rushee.pis_timeslot.$date.$numberLong)).toUTCString()}
+                                </p>
+                                <p className="mt-2 text-slate-300">
+                                    Brother 1:{" "}
+                                    {rushee.pis_signup.first_brother_first_name + " " + rushee.pis_signup.first_brother_last_name}
+                                </p>
+                                <p className="mt-2 text-slate-300">
+                                    Brother 2:{" "}
+                                    {rushee.pis_signup.second_brother_first_name + " " + rushee.pis_signup.second_brother_last_name}
                                 </p>
                                 <div className="mt-4">
                                     <h3 className="text-lg font-semibold text-gray-200">PIS Responses</h3>

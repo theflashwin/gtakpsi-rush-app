@@ -69,6 +69,7 @@ export default function PIS() {
 
     // Handle answer input changes
     const handleAnswerChange = (question, answer) => {
+
         setAnswers((prev) => ({
             ...prev,
             [question]: answer,
@@ -80,42 +81,44 @@ export default function PIS() {
 
         setLoading(true)
 
-        const payload = Object.keys(answers).map((question) => ({
+        const payload = Object.keys(answers)
+        .filter((question) => answers[question].trim() !== "")
+        .map((question) => ({
             question: question,
             answer: answers[question],
         }));
 
         await axios.post(`${api}/rushee/post-pis/${gtid}`, payload)
-        .then((response) => {
+            .then((response) => {
 
-            if (response.data.status === "success") {
-                navigate(`/brother/rushee/${gtid}`)
-            } else {
-                toast.error(`${response.data.message}`, {
-                                    position: "top-center",
-                                    autoClose: 5000,
-                                    hideProgressBar: false,
-                                    closeOnClick: true,
-                                    pauseOnHover: true,
-                                    draggable: true,
-                                    progress: undefined,
-                                    theme: "dark",
-                                });
-            }
-            
-        })
-        .catch((error) => {
-            toast.error(`some network error occurred`, {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-            });
-        })
+                if (response.data.status === "success") {
+                    navigate(`/brother/rushee/${gtid}`)
+                } else {
+                    toast.error(`${response.data.message}`, {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "dark",
+                    });
+                }
+
+            })
+            .catch((error) => {
+                toast.error(`some network error occurred`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                });
+            })
 
         setLoading(false)
 
@@ -126,7 +129,7 @@ export default function PIS() {
             {loading ? (
                 <Loader />
             ) : (
-                <div className="w-screen h-screen bg-slate-800">
+                <div className="w-screen h-screen bg-slate-800 overflow-y-scroll">
                     <Navbar />
 
                     <div className="h-20" />
@@ -160,19 +163,35 @@ export default function PIS() {
                     <div className="mt-10 max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg p-6">
                         <h1 className="text-3xl font-bold text-gray-200 mb-6">PIS Questions</h1>
                         {questions.length > 0 ? (
-                            questions.map((question, idx) => (
-                                <div key={idx} className="mb-6">
-                                    <p className="text-gray-200 font-semibold mb-2">
-                                        {idx + 1}. {question.question}
-                                    </p>
-                                    <textarea
-                                        className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                                        placeholder="Your answer..."
-                                        value={answers[question.question] || ""}
-                                        onChange={(e) => handleAnswerChange(question.question, e.target.value)}
-                                    />
-                                </div>
-                            ))
+                            questions.map((question, idx) => {
+                                // Check if a response exists for the current question
+                                const existingResponse = rushee.pis?.find(
+                                    (response) => response.question === question.question
+                                );
+
+                                return (
+                                    <div key={idx} className="mb-6">
+                                        <p className="text-gray-200 font-semibold mb-2">
+                                            {idx + 1}. {question.question}
+                                        </p>
+
+                                        {existingResponse ? (
+                                            // Display existing response
+                                            <p className="text-gray-300 bg-slate-600 p-3 rounded-lg">
+                                                {existingResponse.answer}
+                                            </p>
+                                        ) : (
+                                            // Show input box for unanswered question
+                                            <textarea
+                                                className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+                                                placeholder="Your answer..."
+                                                value={answers[question.question] || ""}
+                                                onChange={(e) => handleAnswerChange(question.question, e.target.value)}
+                                            />
+                                        )}
+                                    </div>
+                                );
+                            })
                         ) : (
                             <p className="text-gray-300">No questions available.</p>
                         )}
@@ -184,8 +203,12 @@ export default function PIS() {
                             Submit Answers
                         </button>
                     </div>
+
+                    <div className="h-20" />
+
                 </div>
             )}
+
         </div>
     );
 }
