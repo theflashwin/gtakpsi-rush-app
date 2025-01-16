@@ -161,6 +161,41 @@ export default function RusheePage() {
     // Handle form submission
     const handleSubmit = async (e) => {
 
+        setLoading(true)
+
+        if (
+            !rushee.first_name || 
+            !rushee.last_name || 
+            !rushee.housing || 
+            !rushee.phone_number || 
+            !rushee.email || 
+            !rushee.gtid || 
+            !rushee.major || 
+            !rushee.class || 
+            !rushee.pronouns ||
+            rushee.first_name === "" || 
+            rushee.last_name === "" || 
+            rushee.housing === "" || 
+            rushee.phone_number === "" || 
+            rushee.email === "" || 
+            rushee.gtid === "" || 
+            rushee.major === "" || 
+            rushee.class === "" || 
+            rushee.pronouns === ""
+        ) {
+            toast.error(`Fields cannot be empty`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+            });
+            return;
+        }
+
         e.preventDefault();
 
         if (!rushee || !initialRushee) {
@@ -242,7 +277,7 @@ export default function RusheePage() {
             console.log(response);
             
             if (response.data.status === "success") {
-                toast.success(`Updated all fields! If you changed your GTID, your new edit page link is /rushee/${rushee.gtid}/${link}`)
+                window.location.reload(`https://rush-app-2024.web.app/rushee/${rushee.gtid}/${link}`)
             } else {
                 toast.error(`${response.data.message}`, {
                     position: "top-center",
@@ -268,6 +303,8 @@ export default function RusheePage() {
                 theme: "dark",
             });
         }
+
+        setLoading(false)
     };
 
     // Handle input changes
@@ -459,7 +496,15 @@ export default function RusheePage() {
                                         type="text"
                                         name="phone_number"
                                         value={rushee.phone_number}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                            const input = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                                            const formatted = input
+                                                .replace(/^(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3") // Format for full phone numbers
+                                                .replace(/^(\d{3})(\d{1,3})$/, "($1) $2") // Format for partial numbers
+                                                .replace(/^(\d{1,3})$/, "($1"); // Format for the area code only
+                                            e.target.value = formatted;
+                                            handleChange(e)
+                                        }}
                                         className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
                                     />
                                 </div>
