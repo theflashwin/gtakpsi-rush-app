@@ -70,7 +70,7 @@ export async function verifyInfo(gtid, email, phone, isNewGTID) {
         };
     }
 
-    if (phone.length != 10) {
+    if (phone.length != 14) {
         return {
             "status": "error",
             "message": "Phone Number must be 10 digits long"

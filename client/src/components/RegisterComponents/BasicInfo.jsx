@@ -70,7 +70,10 @@ export default function BasicInfo(props) {
                         />
                     </div>
                     <div className="w-full sm:w-1/2 px-3">
-                        <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-phone">
+                        <label
+                            className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2"
+                            htmlFor="grid-phone"
+                        >
                             Phone
                         </label>
                         <input
@@ -78,7 +81,15 @@ export default function BasicInfo(props) {
                             className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
                             id="grid-phone"
                             type="tel"
-                            placeholder="1111111111"
+                            placeholder="(123) 456-7890"
+                            onChange={(e) => {
+                                const input = e.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+                                const formatted = input
+                                    .replace(/^(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3") // Format for full phone numbers
+                                    .replace(/^(\d{3})(\d{1,3})$/, "($1) $2") // Format for partial numbers
+                                    .replace(/^(\d{1,3})$/, "($1"); // Format for the area code only
+                                e.target.value = formatted;
+                            }}
                         />
                     </div>
                 </div>
