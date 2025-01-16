@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { toast } from "react-toastify";
@@ -19,6 +19,7 @@ import PIS from './pages/PIS';
 import MyError from './components/Error';
 import Admin from './pages/Admin';
 import Attendance from './pages/Attendance';
+import BrotherPIS from './pages/BrotherPIS';
 
 function App() {
 
@@ -40,6 +41,7 @@ function App() {
           <Route path='/rushee/:gtid/:link' element={<RusheePage/>} />
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />
+          <Route path='/brother/pis' element={<BrotherPIS/>} />
 
           <Route path='/playground' element={<PisSignUp/>} />
 

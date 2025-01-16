@@ -67,15 +67,17 @@ async fn main() -> Result<(), Error> {
         .route("/rushee/edit-comment/:id", post(controllers::rushee::edit_comment).options(|| async { StatusCode::OK }))
         .route("/rushee/delete-comment/:id", post(controllers::rushee::delete_comment).options(|| async { StatusCode::OK }))
         .route("/rushee/does-rushee-exist/:id", get(controllers::rushee::does_rushee_exist))
+        .route("/rushee/get-timeslots", get(controllers::rushee::get_signup_timeslots))
 
         .route("/admin/add_pis_question", post(controllers::admin::add_pis_question).options(|| async { StatusCode::OK }))
         .route("/admin/delete_pis_question", post(controllers::admin::delete_pis_question).options(|| async { StatusCode::OK }))
         .route("/admin/get_pis_questions", get(controllers::admin::get_pis_questions).options(|| async { StatusCode::OK }))
-        .route("/admin/add_pis_timelsot", post(controllers::admin::add_pis_timeslot).options(|| async { StatusCode::OK }))
+        .route("/admin/add_pis_timeslot", post(controllers::admin::add_pis_timeslot).options(|| async { StatusCode::OK }))
         .route("/admin/delete_pis_timeslot", post(controllers::admin::delete_pis_timeslot).options(|| async { StatusCode::OK }))
         .route("/admin/get_pis_timeslots", get(controllers::admin::get_pis_timeslots).options(|| async { StatusCode::OK }))
         .route("/admin/add-rush-night", post(controllers::admin::add_rush_night).options(|| async { StatusCode::OK }))
         .route("/admin/delete_rush_night", post(controllers::admin::delete_rush_night).options(|| async { StatusCode::OK }))
+        .route("/admin/pis-signup/:id", post(controllers::admin::brother_pis_sign_up))
         
         .layer(
             CorsLayer::new()

@@ -350,7 +350,7 @@ export default function RusheeZoom() {
                                                     style={{ width: `${(rating.value / 5) * 100}%` }}
                                                 ></div>
                                             </div>
-                                            <p className="text-sm text-gray-400 mt-1">{rating.value} / 5</p>
+                                            <p className="text-sm text-gray-400 mt-1">{`${(rating.value / 5) * 100}%`}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -416,13 +416,15 @@ export default function RusheeZoom() {
                                                     }
                                                 >
                                                     <option value="" disabled>
-                                                        Select a rating
+                                                        Not Seen
                                                     </option>
-                                                    {[...Array(6).keys()].map((value) => (
+                                                    {/* {[...Array(6).keys()].map((value) => (
                                                         <option key={value} value={value}>
                                                             {value}
                                                         </option>
-                                                    ))}
+                                                    ))} */}
+                                                    <option value={5}>Satisfactory</option>
+                                                    <option value={0}>Unsatisfactory</option>
                                                 </select>
                                             </div>
                                         ))}
@@ -488,7 +490,7 @@ export default function RusheeZoom() {
                                                         key={rIdx}
                                                         className="bg-slate-500 text-gray-200 px-2 py-1 rounded text-sm"
                                                     >
-                                                        {rating.name}: {rating.value}
+                                                        {rating.name}: {rating.value == 5 ? "Satisfactory" : "Unsatisfactory"}
                                                     </span>
                                                 ))}
                                             </div>

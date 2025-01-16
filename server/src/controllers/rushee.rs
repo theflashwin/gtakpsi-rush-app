@@ -24,6 +24,7 @@ use crate::middlewares::timeHelpers::same_day;
 use crate::middlewares::valid::check_valid_comment;
 use crate::middlewares::{attendance, pis, timeHelpers, valid};
 use crate::models::misc::RushNight;
+use crate::models::pis::PISSignup;
 use crate::models::Rushee::{
     Comment, IncomingComment, IncomingRushee, PisResponse, Rating, RusheeEdit, RusheeModel,
     StrippedRushee,
@@ -116,6 +117,16 @@ pub async fn signup(Json(payload): Json<IncomingRushee>) -> Result<Json<Value>, 
         attendance: Vec::<RushNight>::new(),
         ratings: Vec::<Rating>::new(),
         access_code: access_code.clone(),
+        pis_signup: PISSignup {
+            time: date_converstion,
+            rushee_first_name: payload.first_name.to_string(),
+            rushee_last_name: payload.last_name.to_string(),
+            rushee_gtid: payload.gtid.to_string(),
+            first_brother_first_name: "none".to_string(),
+            first_brother_last_name: "none".to_string(),
+            second_brother_first_name: "none".to_string(),
+            second_brother_last_name: "none".to_string(),
+        },
     };
 
     let result = collection.insert_one(new_rushee).await;
@@ -157,19 +168,17 @@ pub async fn get_rushees() -> Result<Json<Value>, StatusCode> {
 
             while let Some(rushee) = cursor.next().await {
                 match rushee {
-                    Ok(doc) => {
-                        rushees.push(StrippedRushee {
-                            name: format!("{} {}", doc.first_name, doc.last_name),
-                            class: doc.class,
-                            gtid: doc.gtid,
-                            major: doc.major,
-                            ratings: doc.ratings,
-                            image_url: doc.image_url,
-                            email: doc.email,
-                            pronouns: doc.pronouns,
-                            attendance: doc.attendance,
-                        })
-                    }
+                    Ok(doc) => rushees.push(StrippedRushee {
+                        name: format!("{} {}", doc.first_name, doc.last_name),
+                        class: doc.class,
+                        gtid: doc.gtid,
+                        major: doc.major,
+                        ratings: doc.ratings,
+                        image_url: doc.image_url,
+                        email: doc.email,
+                        pronouns: doc.pronouns,
+                        attendance: doc.attendance,
+                    }),
                     Err(err) => {
                         println!("{}", err.to_string());
                         return Ok(Json(json!({
@@ -774,7 +783,6 @@ pub async fn edit_comment(
     Path(id): Path<String>,
     Json(payload): Json<Comment>,
 ) -> Result<Json<Value>, StatusCode> {
-    
     let connection = db::get_rushee_client();
 
     let mut bson_night: bson::Bson;
@@ -808,7 +816,6 @@ pub async fn edit_comment(
     let edit_result = connection.update_one(filter, update).await;
 
     match edit_result {
-
         Ok(_edit) => {
             return Ok(Json(json!({
                 "status": "success",
@@ -822,14 +829,10 @@ pub async fn edit_comment(
                 "message": "there was an error pushing the update to the database"
             })))
         }
-
     }
-
-
 }
 
 pub async fn does_rushee_exist(Path(id): Path<String>) -> Result<Json<Value>, StatusCode> {
-
     let connection = db::get_rushee_client();
 
     let result = connection.find_one(doc! {"gtid": id.clone()}).await;
@@ -852,6 +855,46 @@ pub async fn does_rushee_exist(Path(id): Path<String>) -> Result<Json<Value>, St
         Err(err) => Ok(Json(json!({
             "status": "error",
             "message": "Some network error occurred when checking if the rushee exists or not"
+        }))),
+    }
+}
+
+pub async fn get_signup_timeslots() -> Result<Json<Value>, StatusCode> {
+    let connection = db::get_rushee_client();
+
+    let result = connection
+        .find({
+            doc! {}
+        })
+        .await;
+
+    match result {
+        Ok(mut cursor) => {
+            // TODO: extract useful info only
+            let mut rushees = Vec::<PISSignup>::new();
+
+            while let Some(rushee) = cursor.next().await {
+                match rushee {
+                    Ok(doc) => rushees.push(doc.pis_signup),
+                    Err(err) => {
+                        println!("{}", err.to_string());
+                        return Ok(Json(json!({
+                            "status": "error",
+                            "message": "there was an error pushing the stripped rushee to the array"
+                        })));
+                    }
+                }
+            }
+
+            Ok(Json(json!({
+                "status": "success",
+                "payload": rushees
+            })))
+        }
+
+        Err(err) => Ok(Json(json!({
+            "stauts": "error",
+            "message": "some network error occurred"
         }))),
     }
 }

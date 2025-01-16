@@ -1,7 +1,7 @@
 use bson::DateTime;
 use serde::{Deserialize, Serialize};
 
-use super::{misc::RushNight, pis::PISTimeslot};
+use super::{misc::RushNight, pis::{PISSignup, PISTimeslot}};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct RusheeEdit {
@@ -91,4 +91,5 @@ pub struct RusheeModel {
     pub attendance: Vec<RushNight>,
     pub ratings: Vec<Rating>,
     pub access_code: String,
+    pub pis_signup: PISSignup,
 }

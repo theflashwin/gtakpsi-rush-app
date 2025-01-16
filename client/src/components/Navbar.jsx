@@ -10,7 +10,7 @@ export default function Navbar(props) {
     const stripped = props.stripped
 
     return (
-        <div className="fixed text-white w-full bg-gradient-to-r from-sky-700 to-amber-600">
+        <div className="fixed z-50 text-white w-full bg-gradient-to-r from-sky-700 to-amber-600">
             <nav class="backdrop-blur-sm">
                 <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                     <a href="/" class="flex items-center space-x-3 rtl:space-x-reverse">
