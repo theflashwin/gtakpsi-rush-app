@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function BasicInfo(props) {
 
@@ -112,13 +112,45 @@ export default function BasicInfo(props) {
                         <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-major">
                             Major
                         </label>
-                        <input
+                        <select
                             ref={props.major}
-                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
-                            id="grid-major"
-                            type="text"
-                            placeholder="Biochemistry"
-                        />
+                            className="block appearance-none w-full bg-gray-700 text-gray-200 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-year"
+                        >
+                            <option>Aerospace Engineering</option>
+                            <option>Applied Languages and Intercultural Studies</option>
+                            <option>Biochemistry</option>
+                            <option>Biology</option>
+                            <option>Biomedical Engineering</option>
+                            <option>Business Administration</option>
+                            <option>Chemical and Biomolecular Engineering</option>
+                            <option>Chemistry</option>
+                            <option>Civil Engineering</option>
+                            <option>Computational Media</option>
+                            <option>Computer Engineering</option>
+                            <option>Computer Science</option>
+                            <option>Earth and Atmospheric Sciences</option>
+                            <option>Economics</option>
+                            <option>Economics and International Affairs</option>
+                            <option>Electrical Engineering</option>
+                            <option>Environmental Engineering</option>
+                            <option>Global Economics and Modern Languages</option>
+                            <option>History, Technology, and Society</option>
+                            <option>Industrial Design</option>
+                            <option>Industrial Engineering</option>
+                            <option>International Affairs</option>
+                            <option>International Affairs and Modern Languages</option>
+                            <option>Literature, Media, and Communication</option>
+                            <option>Materials Science and Engineering</option>
+                            <option>Mathematics</option>
+                            <option>Mechanical Engineering</option>
+                            <option>Nuclear and Radiological Engineering</option>
+                            <option>Neuroscience</option>
+                            <option>Physics</option>
+                            <option>Psychology</option>
+                            <option>Public Policy</option>
+
+                        </select>
                     </div>
                 </div>
 

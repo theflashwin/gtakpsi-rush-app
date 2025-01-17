@@ -89,7 +89,7 @@ export default function Dashboard(props) {
 
     const fuse = new Fuse(rushees, {
         keys: ["name", "gtid", "major", "email"],
-        threshold: 0.3, // Adjust for strictness (0 = strict, 1 = loose)
+        threshold: 0.05, // Adjust for strictness (0 = strict, 1 = loose)
     });
 
     const handleSearch = (e) => {
