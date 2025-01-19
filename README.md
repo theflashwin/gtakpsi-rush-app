@@ -19,6 +19,8 @@ Then:
 ```bash
 
 cd client
-npm run deploy
+npm install
+npm install -g firebase-tools
+npm run dev
 
 ```
