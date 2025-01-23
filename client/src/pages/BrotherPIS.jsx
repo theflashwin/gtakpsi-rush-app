@@ -43,30 +43,25 @@ export default function BrotherPIS() {
 
                                 const day = jsDate.toDateString(); // Grouping by the full date
 
+                                const newSlot = {
+                                    time: jsDate,
+                                    rushee_first_name: response.data.payload[slot].rushee_first_name,
+                                    rushee_last_name: response.data.payload[slot].rushee_last_name,
+                                    rushee_gtid: response.data.payload[slot].rushee_gtid,
+                                    first_brother_first_name: response.data.payload[slot].first_brother_first_name,
+                                    first_brother_last_name: response.data.payload[slot].first_brother_last_name,
+                                    second_brother_first_name: response.data.payload[slot].second_brother_first_name,
+                                    second_brother_last_name: response.data.payload[slot].second_brother_last_name,
+                                };
+                            
                                 if (tempDays.has(day)) {
-                                    tempDays.get(day).push({
-                                        time: jsDate,
-                                        rushee_first_name: response.data.payload[slot].rushee_first_name,
-                                        rushee_last_name: response.data.payload[slot].rushee_last_name,
-                                        rushee_gtid: response.data.payload[slot].rushee_gtid,
-                                        first_brother_first_name: response.data.payload[slot].first_brother_first_name,
-                                        first_brother_last_name: response.data.payload[slot].first_brother_last_name,
-                                        second_brother_first_name: response.data.payload[slot].second_brother_first_name,
-                                        second_brother_last_name: response.data.payload[slot].second_brother_last_name,
-                                    });
+                                    tempDays.get(day).push(newSlot);
+                                    tempDays.set(
+                                        day,
+                                        tempDays.get(day).sort((a, b) => a.time - b.time)
+                                    );
                                 } else {
-                                    tempDays.set(day, [
-                                        {
-                                            time: jsDate,
-                                            rushee_first_name: response.data.payload[slot].rushee_first_name,
-                                            rushee_last_name: response.data.payload[slot].rushee_last_name,
-                                            rushee_gtid: response.data.payload[slot].rushee_gtid,
-                                            first_brother_first_name: response.data.payload[slot].first_brother_first_name,
-                                            first_brother_last_name: response.data.payload[slot].first_brother_last_name,
-                                            second_brother_first_name: response.data.payload[slot].second_brother_first_name,
-                                            second_brother_last_name: response.data.payload[slot].second_brother_last_name,
-                                        },
-                                    ]);
+                                    tempDays.set(day, [newSlot]);
                                 }
 
                                 setDays(tempDays);
@@ -85,6 +80,14 @@ export default function BrotherPIS() {
 
                 navigate(`/error/${title}/${description}`)
                 });
+
+            // before we exit, sort the individual arrays by time
+            // for (const d of days.keys()) {
+
+            //     days.set(d, days.get(d).sort((a, b) => b.time - a.time))
+            //     console.log(days.get(d))
+                
+            // }
 
             setLoading(false);
         }

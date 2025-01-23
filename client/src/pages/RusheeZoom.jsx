@@ -206,8 +206,8 @@ export default function RusheeZoom() {
 
                 if (response.data.status === "success") {
 
-                    // window.location.reload();
-                    console.log("worked")
+                    window.location.reload();
+                    // console.log("worked")
 
                 } else {
 
