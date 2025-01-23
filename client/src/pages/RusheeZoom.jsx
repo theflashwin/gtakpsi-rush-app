@@ -41,10 +41,10 @@ export default function RusheeZoom() {
     const api = import.meta.env.VITE_API_PREFIX;
 
     const ratingFields = [
+        "Why AKPsi",
+        "1:1 Interactions",
+        "Group Interactions",
         "Professionalism",
-        "Goatedness",
-        "Awesomeness",
-        "Eye Contact",
     ];
 
     useEffect(() => {

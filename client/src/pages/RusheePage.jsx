@@ -238,8 +238,6 @@ export default function RusheePage() {
 
             const checkValidity = await verifyInfo(rushee["gtid"], rushee["email"], rushee["phone_number"], rushee["gtid"] !== initialRushee["gtid"])
 
-            console.log(checkValidity)
-
             if (checkValidity.status === "error") {
 
                 toast.error(`${checkValidity.message}`, {
@@ -274,7 +272,6 @@ export default function RusheePage() {
 
         try {
             const response = await axios.post(`${api}/rushee/update-rushee/${gtid}`, payload);
-            console.log(response);
             
             if (response.data.status === "success") {
                 window.location.reload(`https://rush-app-2024.web.app/rushee/${rushee.gtid}/${link}`)
@@ -316,7 +313,7 @@ export default function RusheePage() {
     return (
         <div>
 
-            <Navbar />
+            <Navbar stripped={true} />
 
             {loading ? (
                 <Loader />

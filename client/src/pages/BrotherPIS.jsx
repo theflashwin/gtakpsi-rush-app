@@ -129,8 +129,7 @@ export default function BrotherPIS() {
     
                 if (response.data.status === "success") {
                     
-                    // window.location.reload()
-                    console.log("success")
+                    window.location.reload()
 
                 } else {
                     console.error(
