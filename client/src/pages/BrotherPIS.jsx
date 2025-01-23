@@ -99,7 +99,7 @@ export default function BrotherPIS() {
 
     const toggleSlotSelection = (day, slot) => {
         const rusheeName = `${slot.rushee_first_name} ${slot.rushee_last_name}`;
-        const slotKey = `${day}zz${slot.time.toISOString()}zz${slot.rushee_gtid}`;
+        const slotKey = `${slot.rushee_gtid}`;
         
         setSelectedSlots((prevSelected) =>
             prevSelected.includes(slotKey)
@@ -114,10 +114,7 @@ export default function BrotherPIS() {
             // Loop through selected slots and submit each one
             for (const slotKey of selectedSlots) {
 
-                console.log(slotKey.split("zz"))
-
-                const [day, time, gtid] = slotKey.split("zz");
-
+                const gtid = slotKey
                 console.log(gtid)
     
                 const payload = {
@@ -132,7 +129,8 @@ export default function BrotherPIS() {
     
                 if (response.data.status === "success") {
                     
-                    window.location.reload()
+                    // window.location.reload()
+                    console.log("success")
 
                 } else {
                     console.error(
@@ -193,7 +191,7 @@ export default function BrotherPIS() {
                                 <div className="flex flex-wrap gap-2 justify-center">
                                     {timeslots.map((slot, index) => {
                                         const rusheeName = `${slot.rushee_first_name} ${slot.rushee_last_name}`;
-                                        const slotKey = `${day}zz${slot.time.toISOString()}zz${slot.rushee_gtid}`;
+                                        const slotKey = `${slot.rushee_gtid}`;
                                         const isSelected = selectedSlots.includes(slotKey);
 
                                         return (
