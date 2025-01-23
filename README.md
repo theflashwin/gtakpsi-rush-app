@@ -12,13 +12,24 @@ This script deploys the entire application. Note, if you do not have AWS credent
 
 Then:
 
-`./deploy.sh`
+```bash
+
+./deploy.sh
+
+```
 
 ### Deploy Frontend Only
 
 ```bash
 
-cd client
-npm run deploy
+./deploy.sh --frontend
+
+```
+
+### Deploy Backend Only
+
+```bash
+
+./deploy.sh --backend
 
 ```
