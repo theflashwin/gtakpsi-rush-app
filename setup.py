@@ -19,7 +19,7 @@ import boto3
 load_dotenv()
 
 # setup .env variables [if you don't have the aws keys, you need to ask Ashwin or the current PM]
-mongo_uri = os.getenv("MONGODB_URI")
+mongo_uri = "mongodb+srv://gtakpsisoftware:brznOWH0oPA9fT5N@gtakpsi.bf6r1.mongodb.net/"
 api_url = os.getenv("API")
 aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
 aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
