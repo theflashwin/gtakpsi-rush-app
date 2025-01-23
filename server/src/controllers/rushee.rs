@@ -803,8 +803,12 @@ pub async fn edit_comment(
 
     let filter = doc! {
         "gtid": id.clone(),
-        "comments.brother_name": payload.brother_name,
-        "comments.night": bson_night,
+        "comments": {
+            "$elemMatch": {
+                "brother_name": payload.brother_name,
+                "night": bson_night,
+            }
+        }
     };
 
     let update = doc! {
