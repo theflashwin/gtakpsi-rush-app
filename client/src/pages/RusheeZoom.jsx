@@ -190,6 +190,8 @@ export default function RusheeZoom() {
 
     const handleSubmitEdit = async (comment) => {
 
+        console.log(comment)
+
         setLoading(true)
         const payload = {
             brother_id: "000000",
@@ -204,7 +206,8 @@ export default function RusheeZoom() {
 
                 if (response.data.status === "success") {
 
-                    window.location.reload();
+                    // window.location.reload();
+                    console.log("worked")
 
                 } else {
 
