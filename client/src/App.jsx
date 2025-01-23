@@ -20,6 +20,7 @@ import MyError from './components/Error';
 import Admin from './pages/Admin';
 import Attendance from './pages/Attendance';
 import BrotherPIS from './pages/BrotherPIS';
+import AddTimeslotPage from './pages/AddTimeslotPage';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
           <Route path='/brother/rushee/:gtid' element={<RusheeZoom/>} />
           <Route path='/error/:title/:description' element={<MyError/>} />
           <Route path='/admin' element={<Admin/>} />
+          <Route path='/addtimeslotpage' element={<AddTimeslotPage />} />
           <Route path='/rushee/:gtid/:link' element={<RusheePage/>} />
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />
