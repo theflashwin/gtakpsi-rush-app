@@ -82,11 +82,11 @@ export default function PIS() {
         setLoading(true)
 
         const payload = Object.keys(answers)
-        .filter((question) => answers[question].trim() !== "")
-        .map((question) => ({
-            question: question,
-            answer: answers[question],
-        }));
+            .filter((question) => answers[question].trim() !== "")
+            .map((question) => ({
+                question: question,
+                answer: answers[question],
+            }));
 
         await axios.post(`${api}/rushee/post-pis/${gtid}`, payload)
             .then((response) => {
@@ -182,12 +182,39 @@ export default function PIS() {
                                             </p>
                                         ) : (
                                             // Show input box for unanswered question
-                                            <textarea
-                                                className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                                                placeholder="Your answer..."
-                                                value={answers[question.question] || ""}
-                                                onChange={(e) => handleAnswerChange(question.question, e.target.value)}
-                                            />
+
+                                            <div>
+                                                {question.question_type === "MC" ? <div className="flex items-center space-x-4">
+                                                    <label className="flex items-center text-gray-200">
+                                                        <input
+                                                            type="radio"
+                                                            name={question.question}
+                                                            value="Yes"
+                                                            checked={answers[question.question] === "Yes"}
+                                                            onChange={(e) => handleAnswerChange(question.question, e.target.value)}
+                                                            className="mr-2"
+                                                        />
+                                                        Yes
+                                                    </label>
+                                                    <label className="flex items-center text-gray-200">
+                                                        <input
+                                                            type="radio"
+                                                            name={question.question}
+                                                            value="No"
+                                                            checked={answers[question.question] === "No"}
+                                                            onChange={(e) => handleAnswerChange(question.question, e.target.value)}
+                                                            className="mr-2"
+                                                        />
+                                                        No
+                                                    </label>
+                                                </div> : <textarea
+                                                    className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+                                                    placeholder="Your answer..."
+                                                    value={answers[question.question] || ""}
+                                                    onChange={(e) => handleAnswerChange(question.question, e.target.value)}
+                                                />}
+                                            </div>
+
                                         )}
                                     </div>
                                 );

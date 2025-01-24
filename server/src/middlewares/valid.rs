@@ -10,6 +10,24 @@ use crate::{controllers::db, models::{misc::RushNight, Rushee::Comment}};
 
 use super::timeHelpers::same_day;
 
+/**
+ * Changes we have to handle specially
+ */
+pub fn get_pis_signup_breaking_changes() -> HashSet<String> {
+
+    let mut result = HashSet::<String>::new();
+
+    result.insert("first_name".to_string());
+    result.insert("last_name".to_string());
+    result.insert("gtid".to_string());
+
+    return result;
+
+}
+
+/**
+ * General edits to the rushee
+ */
 pub fn get_rushee_edit_fields() -> HashSet<String> {
 
     let mut result = HashSet::<String>::new();

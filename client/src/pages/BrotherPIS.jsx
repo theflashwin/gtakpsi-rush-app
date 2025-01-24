@@ -43,30 +43,25 @@ export default function BrotherPIS() {
 
                                 const day = jsDate.toDateString(); // Grouping by the full date
 
+                                const newSlot = {
+                                    time: jsDate,
+                                    rushee_first_name: response.data.payload[slot].rushee_first_name,
+                                    rushee_last_name: response.data.payload[slot].rushee_last_name,
+                                    rushee_gtid: response.data.payload[slot].rushee_gtid,
+                                    first_brother_first_name: response.data.payload[slot].first_brother_first_name,
+                                    first_brother_last_name: response.data.payload[slot].first_brother_last_name,
+                                    second_brother_first_name: response.data.payload[slot].second_brother_first_name,
+                                    second_brother_last_name: response.data.payload[slot].second_brother_last_name,
+                                };
+                            
                                 if (tempDays.has(day)) {
-                                    tempDays.get(day).push({
-                                        time: jsDate,
-                                        rushee_first_name: response.data.payload[slot].rushee_first_name,
-                                        rushee_last_name: response.data.payload[slot].rushee_last_name,
-                                        rushee_gtid: response.data.payload[slot].rushee_gtid,
-                                        first_brother_first_name: response.data.payload[slot].first_brother_first_name,
-                                        first_brother_last_name: response.data.payload[slot].first_brother_last_name,
-                                        second_brother_first_name: response.data.payload[slot].second_brother_first_name,
-                                        second_brother_last_name: response.data.payload[slot].second_brother_last_name,
-                                    });
+                                    tempDays.get(day).push(newSlot);
+                                    tempDays.set(
+                                        day,
+                                        tempDays.get(day).sort((a, b) => a.time - b.time)
+                                    );
                                 } else {
-                                    tempDays.set(day, [
-                                        {
-                                            time: jsDate,
-                                            rushee_first_name: response.data.payload[slot].rushee_first_name,
-                                            rushee_last_name: response.data.payload[slot].rushee_last_name,
-                                            rushee_gtid: response.data.payload[slot].rushee_gtid,
-                                            first_brother_first_name: response.data.payload[slot].first_brother_first_name,
-                                            first_brother_last_name: response.data.payload[slot].first_brother_last_name,
-                                            second_brother_first_name: response.data.payload[slot].second_brother_first_name,
-                                            second_brother_last_name: response.data.payload[slot].second_brother_last_name,
-                                        },
-                                    ]);
+                                    tempDays.set(day, [newSlot]);
                                 }
 
                                 setDays(tempDays);
@@ -86,6 +81,14 @@ export default function BrotherPIS() {
                 navigate(`/error/${title}/${description}`)
                 });
 
+            // before we exit, sort the individual arrays by time
+            // for (const d of days.keys()) {
+
+            //     days.set(d, days.get(d).sort((a, b) => b.time - a.time))
+            //     console.log(days.get(d))
+                
+            // }
+
             setLoading(false);
         }
 
@@ -96,7 +99,7 @@ export default function BrotherPIS() {
 
     const toggleSlotSelection = (day, slot) => {
         const rusheeName = `${slot.rushee_first_name} ${slot.rushee_last_name}`;
-        const slotKey = `${day}zz${slot.time.toISOString()}zz${slot.rushee_gtid}`;
+        const slotKey = `${slot.rushee_gtid}`;
         
         setSelectedSlots((prevSelected) =>
             prevSelected.includes(slotKey)
@@ -111,10 +114,7 @@ export default function BrotherPIS() {
             // Loop through selected slots and submit each one
             for (const slotKey of selectedSlots) {
 
-                console.log(slotKey.split("zz"))
-
-                const [day, time, gtid] = slotKey.split("zz");
-
+                const gtid = slotKey
                 console.log(gtid)
     
                 const payload = {
@@ -190,7 +190,7 @@ export default function BrotherPIS() {
                                 <div className="flex flex-wrap gap-2 justify-center">
                                     {timeslots.map((slot, index) => {
                                         const rusheeName = `${slot.rushee_first_name} ${slot.rushee_last_name}`;
-                                        const slotKey = `${day}zz${slot.time.toISOString()}zz${slot.rushee_gtid}`;
+                                        const slotKey = `${slot.rushee_gtid}`;
                                         const isSelected = selectedSlots.includes(slotKey);
 
                                         return (

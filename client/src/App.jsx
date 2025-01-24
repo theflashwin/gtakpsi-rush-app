@@ -20,6 +20,7 @@ import MyError from './components/Error';
 import Admin from './pages/Admin';
 import Attendance from './pages/Attendance';
 import BrotherPIS from './pages/BrotherPIS';
+import AddPIS from './pages/AddPIS';
 
 function App() {
 
@@ -42,7 +43,9 @@ function App() {
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />
           <Route path='/brother/pis' element={<BrotherPIS/>} />
-          
+
+          <Route path='/admin/addpis' element={<AddPIS/>} />
+            
         </Routes>
 
         <div className="fixed bottom-0 w-full bg-blue-900 text-white text-center py-2 text-sm">
