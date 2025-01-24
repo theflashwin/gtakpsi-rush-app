@@ -18,6 +18,7 @@ import PIS from './pages/PIS';
 
 import MyError from './components/Error';
 import Admin from './pages/Admin';
+import AddRushNight from './pages/AdminRushNight';
 import Attendance from './pages/Attendance';
 import BrotherPIS from './pages/BrotherPIS';
 import AddPIS from './pages/AddPIS';
@@ -39,6 +40,7 @@ function App() {
           <Route path='/brother/rushee/:gtid' element={<RusheeZoom/>} />
           <Route path='/error/:title/:description' element={<MyError/>} />
           <Route path='/admin' element={<Admin/>} />
+          <Route path='/rush/night' element={<AddRushNight/>} />
           <Route path='/rushee/:gtid/:link' element={<RusheePage/>} />
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />

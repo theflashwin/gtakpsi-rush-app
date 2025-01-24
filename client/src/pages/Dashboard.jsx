@@ -24,11 +24,13 @@ export default function Dashboard(props) {
     const [errorDescription, setErrorDescription] = useState("");
     const [error, setError] = useState(false);
 
-    const [rushees, setRushees] = useState([]);
+    
     const [filteredRushees, setFilteredRushees] = useState([]);
     const [query, setQuery] = useState("");
+    const [sortBy, setSortBy] = useState("none");
 
     // filters
+    const [rushees, setRushees] = useState([]);
     const [selectedMajor, setSelectedMajor] = useState("All");
     const [selectedClass, setSelectedClass] = useState("All");
     const [selectedCloud, setSelectedCloud] = useState("All");
@@ -44,6 +46,16 @@ export default function Dashboard(props) {
             .sort((a, b) => a.sort - b.sort)
             .map(({ value }) => value);
     }
+
+    const sortRushees = (criteria) => {
+        if (criteria === "name") {
+            const sorted = [...rushees].sort((a, b) => a.name.localeCompare(b.name));
+            setFilteredRushees(sorted);
+        } else if (criteria === "none") {
+            const shuffled = shuffleArray(rushees); // Shuffle to reset to a random order
+            setFilteredRushees(shuffled);
+        }
+    };
 
     useEffect(() => {
         async function fetch() {
@@ -210,6 +222,7 @@ export default function Dashboard(props) {
                                                 </span>
                                             </div>
 
+
                                             {/* Sorting Dropdown */}
                                             <div className="relative">
                                                 <select
@@ -220,11 +233,13 @@ export default function Dashboard(props) {
                                                     <option value="none">No Sorting</option>
                                                     <option value="firstName">Sort by First Name</option>
                                                     <option value="lastName">Sort by Last Name</option>
+
                                                 </select>
                                                 <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
                                                     ▼
                                                 </span>
                                             </div>
+
                                         </div>
 
                                         {/* Shuffle Button (Aligned to the Right) */}
