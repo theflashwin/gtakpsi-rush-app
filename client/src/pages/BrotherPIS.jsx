@@ -15,7 +15,7 @@ export default function BrotherPIS() {
     const user = JSON.parse(localStorage.getItem('user'))
 
     const [days, setDays] = useState(new Map());
-    const [selectedSlots, setSelectedSlots] = useState([]);
+    const [selectedSlot, setSelectedSlot] = useState(null);
     const [loading, setLoading] = useState(true)
 
     const navigate = useNavigate()
@@ -94,77 +94,66 @@ export default function BrotherPIS() {
         }
     }, [loading, navigate]);
 
-    const toggleSlotSelection = (day, slot) => {
-        const rusheeName = `${slot.rushee_first_name} ${slot.rushee_last_name}`;
+    const handleSlotSelection = (day, slot) => {
         const slotKey = `${day}zz${slot.time.toISOString()}zz${slot.rushee_gtid}`;
-        
-        setSelectedSlots((prevSelected) =>
-            prevSelected.includes(slotKey)
-                ? prevSelected.filter((key) => key !== slotKey)
-                : [...prevSelected, slotKey]
-        );
+        setSelectedSlot(selectedSlot === slotKey ? null : slotKey);
     };
 
     const handleSubmit = async () => {
+        if (!selectedSlot) return;
 
         try {
-            // Loop through selected slots and submit each one
-            for (const slotKey of selectedSlots) {
+            const [day, time, gtid] = selectedSlot.split("zz");
 
-                console.log(slotKey.split("zz"))
+            const payload = {
+                brother_first_name: user.firstname,
+                brother_last_name: user.lastname, 
+            };
 
-                const [day, time, gtid] = slotKey.split("zz");
+            const response = await axios.post(
+                `${api}/admin/pis-signup/${gtid}`,
+                payload
+            );
 
-                console.log(gtid)
-    
-                const payload = {
-                    brother_first_name: user.firstname,
-                    brother_last_name: user.lastname, 
-                };
-    
-                const response = await axios.post(
-                    `${api}/admin/pis-signup/${gtid}`, // Replace `day` with `id` if `id` is used in the Rust endpoint
-                    payload
-                );
-    
-                if (response.data.status === "success") {
-                    
-                    window.location.reload()
-
-                } else {
-                    console.error(
-                        `Failed to register for timeslot: ${time}. Message: ${response.data.message}`
-                    );
-                    toast.error(`${response.data.message}`, {
-                                            position: "top-center",
-                                            autoClose: 5000,
-                                            hideProgressBar: false,
-                                            closeOnClick: true,
-                                            pauseOnHover: true,
-                                            draggable: true,
-                                            progress: undefined,
-                                            theme: "dark",
-                                        });
-                    return; // Stop if any registration fails
-                }
+            if (response.data.status === "success") {
+                alert("YOU successfully signed up for PIS timeslot! Great Work!");
+                window.location.reload();
+            } else {
+                toast.error(`${response.data.message}`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    style: {
+                        fontSize: '18px',
+                        padding: '20px',
+                        minHeight: '80px'
+                    }
+                });
             }
-    
-
         } catch (error) {
-            console.error("Error submitting selected slots:", error);
-            toast.error(`${"An error occurred while submitting the timeslots. Please try again."}`, {
-                                    position: "top-center",
-                                    autoClose: 5000,
-                                    hideProgressBar: false,
-                                    closeOnClick: true,
-                                    pauseOnHover: true,
-                                    draggable: true,
-                                    progress: undefined,
-                                    theme: "dark",
-                                });
+            console.error("Error submitting selected slot:", error);
+            toast.error("An error occurred while submitting the timeslot. Please try again.", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                style: {
+                    fontSize: '18px',
+                    padding: '20px',
+                    minHeight: '80px'
+                }
+            });
         }
-
-    }
+    };
 
     return (
 
@@ -191,7 +180,7 @@ export default function BrotherPIS() {
                                     {timeslots.map((slot, index) => {
                                         const rusheeName = `${slot.rushee_first_name} ${slot.rushee_last_name}`;
                                         const slotKey = `${day}zz${slot.time.toISOString()}zz${slot.rushee_gtid}`;
-                                        const isSelected = selectedSlots.includes(slotKey);
+                                        const isSelected = selectedSlot === slotKey;
 
                                         return (
                                             <div
@@ -201,7 +190,7 @@ export default function BrotherPIS() {
                                                         ? "bg-gradient-to-r from-teal-500 to-green-600 scale-105 shadow-lg"
                                                         : "bg-gradient-to-r from-sky-700 via-teal-600 to-amber-600 hover:scale-105 hover:shadow-lg"
                                                 }`}
-                                                onClick={() => toggleSlotSelection(day, slot)}
+                                                onClick={() => handleSlotSelection(day, slot)}
                                             >
                                                 <p>
                                                     <strong>Time:</strong>{" "}
@@ -234,9 +223,9 @@ export default function BrotherPIS() {
                     </div>
                     <button
                             onClick={handleSubmit}
-                            className={`${selectedSlots.length > 0 ? "visible" : "invisible"} mt-6 py-3 px-6 text-lg font-bold rounded-lg transition bg-gradient-to-r from-amber-600 to-sky-700 hover:scale-105 hover:shadow-lg text-white`}
+                            className={`${selectedSlot ? "visible" : "invisible"} mt-6 py-3 px-6 text-lg font-bold rounded-lg transition bg-gradient-to-r from-amber-600 to-sky-700 hover:scale-105 hover:shadow-lg text-white`}
                         >
-                            Submit Selected Slots
+                            Submit Selected Slot
                         </button>
                 </div>
             </div>}
