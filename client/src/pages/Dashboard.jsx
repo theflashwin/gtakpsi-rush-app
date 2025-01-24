@@ -34,6 +34,7 @@ export default function Dashboard(props) {
     const [selectedMajor, setSelectedMajor] = useState("All");
     const [selectedClass, setSelectedClass] = useState("All");
     const [selectedCloud, setSelectedCloud] = useState("All");
+    const [selectedSort, setSelectedSort] = useState("none")
 
     const navigate = useNavigate();
 
@@ -101,19 +102,22 @@ export default function Dashboard(props) {
 
     const fuse = new Fuse(rushees, {
         keys: ["name", "gtid", "major", "email"],
-        threshold: 0.05, // Adjust for strictness (0 = strict, 1 = loose)
+        threshold: 0.3, // Less strict
+        minMatchCharLength: 1, // Minimum length of matching characters
     });
+    
 
     const handleSearch = (e) => {
         const input = e.target.value;
+        console.log(input)
         setQuery(input);
 
-        if (input.trim() === "") {
-            setFilteredRushees(rushees);
-        } else {
-            const fuzzyResults = fuse.search(input);
-            setFilteredRushees(fuzzyResults.map((result) => result.item)); // Extract matching items
-        }
+        // if (input.trim() === "") {
+        //     setFilteredRushees(rushees);
+        // } else {
+        //     const fuzzyResults = fuse.search(input);
+        //     setFilteredRushees(fuzzyResults.map((result) => result.item)); // Extract matching items
+        // }
     };
 
     const handleFilters = () => {
@@ -132,17 +136,27 @@ export default function Dashboard(props) {
         // Filter by query
         if (query.trim() !== "") {
             const fuzzyResults = fuse.search(query);
-            filtered = filtered.filter((rushee) =>
-                fuzzyResults.some((result) => result.item.id === rushee.id)
-            );
+            filtered = fuzzyResults.map((result) => result.item)
         }
 
+        // Sort by selected criterion
+        if (selectedSort === "firstName") {
+            filtered = [...filtered].sort((a, b) => a.name.split(" ")[0].localeCompare(b.name.split(" ")[0]));
+        } else if (selectedSort === "lastName") {
+            filtered = [...filtered].sort((a, b) => {
+                const aLastName = a.name.split(" ").slice(-1)[0];
+                const bLastName = b.name.split(" ").slice(-1)[0];
+                return aLastName.localeCompare(bLastName);
+            });
+        }        
+
+        console.log(filtered)
         setFilteredRushees(filtered);
     };
 
     useEffect(() => {
         handleFilters();
-    }, [query, selectedMajor, selectedClass]);
+    }, [query, selectedMajor, selectedClass, selectedSort]);
 
     return (
         <div>
@@ -207,40 +221,35 @@ export default function Dashboard(props) {
                                                     ▼
                                                 </span>
                                             </div>
-                                            
-                                            {/* Sorting */}
+
+
+                                            {/* Sorting Dropdown */}
                                             <div className="relative">
                                                 <select
-                                                    value={sortBy}
-                                                    onChange={(e) => {
-                                                        const criteria = e.target.value;
-                                                        setSortBy(criteria);
-                                                        sortRushees(criteria);
-                                                    }}
+                                                    value={selectedSort}
+                                                    onChange={(e) => setSelectedSort(e.target.value)}
                                                     className="p-3 pr-8 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-slate-700 text-white appearance-none"
                                                 >
-                                                    <option value="none">No Sort (Shuffled)</option>
-                                                    <option value="name">Sort by Name</option>
+                                                    <option value="none">No Sorting</option>
+                                                    <option value="firstName">Sort by First Name</option>
+                                                    <option value="lastName">Sort by Last Name</option>
+
                                                 </select>
                                                 <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
                                                     ▼
                                                 </span>
                                             </div>
 
-                                            
-                                            
-
                                         </div>
 
                                         {/* Shuffle Button (Aligned to the Right) */}
                                         <div onClick={() => {
-                                                const shuffled = shuffleArray(rushees);
-                                                setFilteredRushees(shuffled);
-                                            }}>
+                                            const shuffled = shuffleArray(rushees);
+                                            setFilteredRushees(shuffled);
+                                        }}>
                                             <Button text={"Shuffle Rushees"} />
                                         </div>
                                     </div>
-
 
                                 </div>
 

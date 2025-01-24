@@ -632,7 +632,31 @@ pub async fn update_rushee(
     let mut update: Document;
 
     for edit in payload.iter() {
-        if valid::get_rushee_edit_fields().contains(&edit.field) {
+        if valid::get_pis_signup_breaking_changes().contains(&edit.field) {
+            filter = doc! {"gtid": id.clone()};
+            update = doc! {
+                "$set": {
+                    edit.field.clone(): edit.new_value.clone(),
+                    format!("pis_signup.rushee_{}", edit.field.clone()): edit.new_value.clone()
+                }
+            };
+
+            let result = connection.update_one(filter, update).await;
+
+            match result {
+                Ok(_update_reult) => {
+                    // do nothing
+                }
+
+                Err(err) => {
+                    return Ok(Json(json!({
+                        "status": "error",
+                        "message": err.to_string()
+                    })))
+                }
+            }
+
+        } else if valid::get_rushee_edit_fields().contains(&edit.field) {
             filter = doc! {"gtid": id.clone()};
             update = doc! {"$set": doc! { edit.field.clone(): edit.new_value.clone() }};
 
@@ -653,7 +677,7 @@ pub async fn update_rushee(
         } else {
             return Ok(Json(json!({
                 "status": "error",
-                "message": "Invalid rushee field passed in"
+                "message": format!("Invalid rushee field passed in: {}", edit.field)
             })));
         }
     }
@@ -803,8 +827,12 @@ pub async fn edit_comment(
 
     let filter = doc! {
         "gtid": id.clone(),
-        "comments.brother_name": payload.brother_name,
-        "comments.night": bson_night,
+        "comments": {
+            "$elemMatch": {
+                "brother_name": payload.brother_name,
+                "night": bson_night,
+            }
+        }
     };
 
     let update = doc! {

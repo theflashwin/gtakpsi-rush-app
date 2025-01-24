@@ -21,6 +21,7 @@ import Admin from './pages/Admin';
 import AddRushNight from './pages/AdminRushNight';
 import Attendance from './pages/Attendance';
 import BrotherPIS from './pages/BrotherPIS';
+import AddPIS from './pages/AddPIS';
 
 function App() {
 
@@ -44,6 +45,8 @@ function App() {
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />
           <Route path='/brother/pis' element={<BrotherPIS/>} />
+
+          <Route path='/admin/addpis' element={<AddPIS/>} />
 
         </Routes>
 
