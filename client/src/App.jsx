@@ -42,8 +42,25 @@ function App() {
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />
           <Route path='/brother/pis' element={<BrotherPIS/>} />
-
+          
         </Routes>
+
+        <div className="fixed bottom-0 w-full bg-blue-900 text-white text-center py-2 text-sm">
+          Contact us at:{" "}   
+          <a
+            href="mailto:example@example.com"
+            className="text-blue-300 no-underline hover:underline"
+          >
+            malenpatel@gatech.edu
+          </a>
+          {" "}or{" "} 
+          <a
+            href="mailto:example@example.com"
+            className="text-blue-300 no-underline hover:underline"
+          >
+            dchatterjea6@gatech.edu
+          </a>
+        </div>
 
       </BrowserRouter>
 
