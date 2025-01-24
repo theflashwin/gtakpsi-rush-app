@@ -30,10 +30,10 @@ export default function RusheeZoom() {
     const [isAddingComment, setIsAddingComment] = useState(false);
     const [newComment, setNewComment] = useState("");
     const [ratings, setRatings] = useState({
+        "Why AKPsi": null,
+        "1:1 Interactions": null,
+        "Group Interactions": null,
         "Professionalism": null,
-        "Goatedness": null,
-        "Awesomeness": null,
-        "Eye Contact": null,
     });
 
     const navigate = useNavigate();
