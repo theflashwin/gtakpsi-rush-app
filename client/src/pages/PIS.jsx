@@ -155,6 +155,7 @@ export default function PIS() {
                                 <p>Email: {rushee.email}</p>
                                 <p>Phone: {rushee.phone_number}</p>
                                 <p>Housing: {rushee.housing}</p>
+                                <p>GTID: {rushee.gtid}</p>
                             </div>
                         </div>
                     </div>
