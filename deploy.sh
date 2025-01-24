@@ -31,6 +31,6 @@ elif [[ $1 == "--backend" ]]; then
     echo "Running backend commands..."
     run_commands "${backend_commands[@]}"
 else
-    echo "Usage: $0 --frontend | --backend"
-    exit 1
+    run_commands "${frontend_commands[@]}"
+    run_commands "${backend_commands[@]}"
 fi

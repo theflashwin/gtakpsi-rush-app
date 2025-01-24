@@ -78,6 +78,7 @@ async fn main() -> Result<(), Error> {
         .route("/admin/add-rush-night", post(controllers::admin::add_rush_night).options(|| async { StatusCode::OK }))
         .route("/admin/delete_rush_night", post(controllers::admin::delete_rush_night).options(|| async { StatusCode::OK }))
         .route("/admin/pis-signup/:id", post(controllers::admin::brother_pis_sign_up))
+        .route("/admin/get-brother-pis", post(controllers::admin::get_brother_pis))
         
         .layer(
             CorsLayer::new()
