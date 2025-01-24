@@ -63,7 +63,7 @@ export default function RusheeZoom() {
 
                             if (response.data.status === "success") {
 
-                                console.log(response.data.payload);
+                                //console.log(response.data.payload);
                                 setRushee(response.data.payload);
 
                             } else {
@@ -123,7 +123,7 @@ export default function RusheeZoom() {
             ratings: actualRatings,
         }
 
-        console.log(user)
+        
 
         await axios.post(`${api}/rushee/post-comment/${gtid}`, payload)
             .then((response) => {

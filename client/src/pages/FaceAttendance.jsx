@@ -52,7 +52,6 @@ export default function FaceAttendance() {
 
             // Convert embeddings to a 1D array
             vector = Array.from(embeddings.dataSync()); // This ensures a flat array
-            console.log(typeof vector);
 
         } catch (err) {
 

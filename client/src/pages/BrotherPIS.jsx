@@ -34,7 +34,7 @@ export default function BrotherPIS() {
 
                             const tempDays = new Map();
 
-                            console.log(response.data.payload)
+
 
                             for (const slot in response.data.payload) {
                                 const jsDate = new Date(
@@ -115,7 +115,7 @@ export default function BrotherPIS() {
             for (const slotKey of selectedSlots) {
 
                 const gtid = slotKey
-                console.log(gtid)
+
     
                 const payload = {
                     brother_first_name: user.firstname,

@@ -18,7 +18,6 @@ export default function Login() {
             setLoading(true)
             const well = await verifyUser()
             .then((response) => {
-                console.log(response)
                 if (response == true) {
                     navigate('/dashboard')
                 } else {

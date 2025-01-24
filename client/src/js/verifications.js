@@ -62,7 +62,6 @@ export async function verifyInfo(gtid, email, phone, isNewGTID) {
 
     // verify gtid is 9 digits
     // check length
-    console.log(gtid.length)
     if (gtid.length != 9) {
         return {
             "status": "error",

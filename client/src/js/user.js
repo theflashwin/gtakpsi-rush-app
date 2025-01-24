@@ -49,7 +49,6 @@ export async function login(credentials) {
                 localStorage.setItem('user', JSON.stringify(response.data.user))
                 localStorage.setItem('token', JSON.stringify(response.data.token))
 
-                console.log("hey")
                 x = true
 
             }

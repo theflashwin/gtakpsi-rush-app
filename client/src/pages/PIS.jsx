@@ -47,7 +47,7 @@ export default function PIS() {
                     await axios.get(`${api}/admin/get_pis_questions`)
                         .then((response) => {
                             if (response.data.status === "success") {
-                                console.log(response.data.payload)
+                                //console.log(response.data.payload)
                                 setQuestions(response.data.payload);
                             } else {
                                 navigate(`/error/${errorTitle}/${"Failed to fetch PIS questions"}`);
