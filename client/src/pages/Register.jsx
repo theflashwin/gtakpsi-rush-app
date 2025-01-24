@@ -253,7 +253,7 @@ export default function Register() {
 
     return (
         <div className="w-screen h-screen bg-slate-800 flex flex-col overflow-y-auto">
-            <Navbar />
+            <Navbar stripped={true} />
 
             {/* Spacing between Navbar and the form */}
             <div className="flex-1 flex flex-col items-center justify-center">
