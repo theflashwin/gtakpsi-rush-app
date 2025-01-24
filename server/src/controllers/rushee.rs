@@ -677,7 +677,7 @@ pub async fn update_rushee(
         } else {
             return Ok(Json(json!({
                 "status": "error",
-                "message": "Invalid rushee field passed in"
+                "message": format!("Invalid rushee field passed in: {}", edit.field)
             })));
         }
     }
