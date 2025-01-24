@@ -41,7 +41,7 @@ export default function Navbar(props) {
                                 <a href="/admin" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-white ">Admin Dashboard</a>
                             </li>: <></>} */}
                             <li>
-                                <a href="https://docs.google.com/spreadsheets/d/1yMFMzfbZ2mAe3YkMMSJa6vVkeiWfVc6nBnloVXicS8g/edit?gid=0#gid=0" target="_blank" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-whit">Report a Bug</a>
+                                <a href="https://forms.gle/VUEPBJAhLcmM3kJp7" target="_blank" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-whit">Report a Bug</a>
                             </li>
                             {verifyUser() ? <li>
                                 <p onClick={() => {
