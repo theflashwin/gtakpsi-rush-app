@@ -51,7 +51,7 @@ async fn main() -> Result<(), Error> {
 
     // let mongo_uri = env::var("MONGO_URI").expect("MONGO URI Must be Set");
 
-    controllers::db::initialize_mongo_client(&"mongodb+srv://ashwin:ashwin@cluster0.fmupqcr.mongodb.net/raffy").await?;
+    controllers::db::initialize_mongo_client(&"mongodb+srv://gtakpsisoftware:brznOWH0oPA9fT5N@gtakpsi.bf6r1.mongodb.net/").await?;
 
     let app = Router::new()
 
@@ -78,6 +78,7 @@ async fn main() -> Result<(), Error> {
         .route("/admin/add-rush-night", post(controllers::admin::add_rush_night).options(|| async { StatusCode::OK }))
         .route("/admin/delete_rush_night", post(controllers::admin::delete_rush_night).options(|| async { StatusCode::OK }))
         .route("/admin/pis-signup/:id", post(controllers::admin::brother_pis_sign_up))
+        .route("/admin/get-brother-pis", post(controllers::admin::get_brother_pis))
         
         .layer(
             CorsLayer::new()

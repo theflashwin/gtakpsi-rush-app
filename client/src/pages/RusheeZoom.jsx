@@ -30,10 +30,10 @@ export default function RusheeZoom() {
     const [isAddingComment, setIsAddingComment] = useState(false);
     const [newComment, setNewComment] = useState("");
     const [ratings, setRatings] = useState({
+        "Why AKPsi": null,
+        "1:1 Interactions": null,
+        "Group Interactions": null,
         "Professionalism": null,
-        "Goatedness": null,
-        "Awesomeness": null,
-        "Eye Contact": null,
     });
 
     const navigate = useNavigate();
@@ -41,10 +41,10 @@ export default function RusheeZoom() {
     const api = import.meta.env.VITE_API_PREFIX;
 
     const ratingFields = [
+        "Why AKPsi",
+        "1:1 Interactions",
+        "Group Interactions",
         "Professionalism",
-        "Goatedness",
-        "Awesomeness",
-        "Eye Contact",
     ];
 
     useEffect(() => {
@@ -190,6 +190,8 @@ export default function RusheeZoom() {
 
     const handleSubmitEdit = async (comment) => {
 
+        console.log(comment)
+
         setLoading(true)
         const payload = {
             brother_id: "000000",
@@ -205,6 +207,7 @@ export default function RusheeZoom() {
                 if (response.data.status === "success") {
 
                     window.location.reload();
+                    // console.log("worked")
 
                 } else {
 
@@ -320,6 +323,7 @@ export default function RusheeZoom() {
                                         <p>Email: {rushee.email}</p>
                                         <p>Phone: {rushee.phone_number}</p>
                                         <p>Housing: {rushee.housing}</p>
+                                        <p>GTID: {rushee.gtid}</p>
                                     </div>
                                 </div>
                             </div>

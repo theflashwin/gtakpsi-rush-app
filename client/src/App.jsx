@@ -21,6 +21,8 @@ import Admin from './pages/Admin';
 import Attendance from './pages/Attendance';
 import BrotherPIS from './pages/BrotherPIS';
 import AddTimeslotPage from './pages/AddTimeslotPage';
+import AddPIS from './pages/AddPIS';
+import PISDashboard from './pages/PISDashboard';
 
 function App() {
 
@@ -44,6 +46,9 @@ function App() {
           <Route path='/pis/:gtid' element={<PIS/>} />
           <Route path='/attendance' element={<Attendance/>} />
           <Route path='/brother/pis' element={<BrotherPIS/>} />
+          <Route path='/brother/dashboard' element={<PISDashboard/>} />
+
+          <Route path='/admin/addpis' element={<AddPIS/>} />
 
         </Routes>
 

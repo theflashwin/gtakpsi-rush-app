@@ -164,23 +164,23 @@ export default function RusheePage() {
         setLoading(true)
 
         if (
-            !rushee.first_name || 
-            !rushee.last_name || 
-            !rushee.housing || 
-            !rushee.phone_number || 
-            !rushee.email || 
-            !rushee.gtid || 
-            !rushee.major || 
-            !rushee.class || 
+            !rushee.first_name ||
+            !rushee.last_name ||
+            !rushee.housing ||
+            !rushee.phone_number ||
+            !rushee.email ||
+            !rushee.gtid ||
+            !rushee.major ||
+            !rushee.class ||
             !rushee.pronouns ||
-            rushee.first_name === "" || 
-            rushee.last_name === "" || 
-            rushee.housing === "" || 
-            rushee.phone_number === "" || 
-            rushee.email === "" || 
-            rushee.gtid === "" || 
-            rushee.major === "" || 
-            rushee.class === "" || 
+            rushee.first_name === "" ||
+            rushee.last_name === "" ||
+            rushee.housing === "" ||
+            rushee.phone_number === "" ||
+            rushee.email === "" ||
+            rushee.gtid === "" ||
+            rushee.major === "" ||
+            rushee.class === "" ||
             rushee.pronouns === ""
         ) {
             toast.error(`Fields cannot be empty`, {
@@ -238,8 +238,6 @@ export default function RusheePage() {
 
             const checkValidity = await verifyInfo(rushee["gtid"], rushee["email"], rushee["phone_number"], rushee["gtid"] !== initialRushee["gtid"])
 
-            console.log(checkValidity)
-
             if (checkValidity.status === "error") {
 
                 toast.error(`${checkValidity.message}`, {
@@ -274,8 +272,7 @@ export default function RusheePage() {
 
         try {
             const response = await axios.post(`${api}/rushee/update-rushee/${gtid}`, payload);
-            console.log(response);
-            
+
             if (response.data.status === "success") {
                 window.location.reload(`https://rush-app-2024.web.app/rushee/${rushee.gtid}/${link}`)
             } else {
@@ -309,6 +306,7 @@ export default function RusheePage() {
 
     // Handle input changes
     const handleChange = (e) => {
+
         const { name, value } = e.target;
         setRushee({ ...rushee, [name]: value });
     };
@@ -316,7 +314,7 @@ export default function RusheePage() {
     return (
         <div>
 
-            <Navbar />
+            <Navbar stripped={true} />
 
             {loading ? (
                 <Loader />
@@ -541,24 +539,65 @@ export default function RusheePage() {
                                 {/* Major */}
                                 <div>
                                     <label className="block text-gray-200 font-semibold mb-1">Major</label>
-                                    <input
-                                        type="text"
+                                    <select
                                         name="major"
                                         value={rushee.major}
                                         onChange={handleChange}
                                         className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                                    />
+                                        id="grid-year"
+                                    >
+                                        <option>Aerospace Engineering</option>
+                                        <option value={"new"}>Applied Languages and Intercultural Studies</option>
+                                        <option>Architecture</option>
+                                        <option>Biochemistry</option>
+                                        <option>Biology</option>
+                                        <option>Biomedical Engineering</option>
+                                        <option>Business Administration</option>
+                                        <option>Chemical and Biomolecular Engineering</option>
+                                        <option>Chemistry</option>
+                                        <option>Civil Engineering</option>
+                                        <option>Computational Media</option>
+                                        <option>Computer Engineering</option>
+                                        <option>Computer Science</option>
+                                        <option>Earth and Atmospheric Sciences</option>
+                                        <option>Economics</option>
+                                        <option>Economics and International Affairs</option>
+                                        <option>Electrical Engineering</option>
+                                        <option>Environmental Engineering</option>
+                                        <option>Global Economics and Modern Languages</option>
+                                        <option>History, Technology, and Society</option>
+                                        <option>Industrial Design</option>
+                                        <option>Industrial Engineering</option>
+                                        <option>International Affairs</option>
+                                        <option>International Affairs and Modern Languages</option>
+                                        <option>Literature, Media, and Communication</option>
+                                        <option>Materials Science and Engineering</option>
+                                        <option>Mathematics</option>
+                                        <option>Mechanical Engineering</option>
+                                        <option>Nuclear and Radiological Engineering</option>
+                                        <option>Neuroscience</option>
+                                        <option>Physics</option>
+                                        <option>Psychology</option>
+                                        <option>Public Policy</option>
+
+                                    </select>
                                 </div>
                                 {/* Class */}
                                 <div>
                                     <label className="block text-gray-200 font-semibold mb-1">Class</label>
-                                    <input
+                                    <select
                                         type="text"
                                         name="class"
                                         value={rushee.class}
                                         onChange={handleChange}
                                         className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                                    />
+                                    >
+                                        <option>First</option>
+                                        <option>Second</option>
+                                        <option>Third</option>
+                                        <option>Fourth</option>
+                                        <option>Fifth+</option>
+                                    </select>
                                 </div>
                             </div>
 

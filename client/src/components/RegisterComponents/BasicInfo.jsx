@@ -119,6 +119,7 @@ export default function BasicInfo(props) {
                         >
                             <option>Aerospace Engineering</option>
                             <option>Applied Languages and Intercultural Studies</option>
+                            <option>Architecture</option>
                             <option>Biochemistry</option>
                             <option>Biology</option>
                             <option>Biomedical Engineering</option>
