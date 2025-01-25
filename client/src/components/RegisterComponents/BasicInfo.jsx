@@ -193,13 +193,36 @@ export default function BasicInfo(props) {
                         <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-exposure">
                             How did you find us?
                         </label>
-                        <input
+
+                        <select
                             ref={props.exposure}
-                            className="appearance-none block w-full bg-gray-700 text-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:ring focus:ring-blue-400"
-                            id="grid-exposure"
-                            type="text"
-                            placeholder="Word of Mouth, Tabling Event, etc.."
-                        />
+                            className="block appearance-none w-full bg-gray-700 text-gray-200 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:ring focus:ring-blue-400"
+                            id="grid-year"
+                        >
+
+                            <option>Friend or relative in GT AKPsi</option>
+                            <option>Friend or relative NOT in GT AKPsi</option>
+                            <option>Instagram Account</option>
+                            <option>Instagram Ad</option>
+                            <option>GT 1000/2000 Advertisement</option>
+                            <option>Email Newsletter</option>
+                            <option>Canvas Announcement</option>
+                            <option>TikTok</option>
+                            <option>LinkedIn</option>
+                            <option>Reddit</option>
+                            <option>Email</option>
+                            <option>Flyer Found on Campus</option>
+                            <option>Via Another Organization</option>
+                            <option>AKPsi Website/Online Search</option>
+                            <option>Virtual Information Session</option>
+                            <option>Resume Blitz</option>
+                            <option>Fall Org Fair</option>
+                            <option>Interest Night</option>
+                            <option>Scheller Org Fair</option>
+                            <option>Tabling Event</option>
+
+                        </select>
+
                     </div>
                 </div>
 

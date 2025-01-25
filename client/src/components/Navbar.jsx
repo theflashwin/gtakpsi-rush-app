@@ -36,12 +36,8 @@ export default function Navbar(props) {
                             <li>
                                 <a href="/brother/pis" class="block py-2 px-3 text-whit rounded md:bg-transparent md:p-0 dark:text-white" aria-current="page">PIS Signup</a>
                             </li>
-
-                            {/* {verifyIsAdmin() ?<li>
-                                <a href="/admin" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-white ">Admin Dashboard</a>
-                            </li>: <></>} */}
                             <li>
-                                <a href="https://docs.google.com/spreadsheets/d/1yMFMzfbZ2mAe3YkMMSJa6vVkeiWfVc6nBnloVXicS8g/edit?gid=0#gid=0" target="_blank" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-whit">Report a Bug</a>
+                                <a href="/attendance" target="_blank" class="block py-2 px-3 text-white rounded md:border-0 md:p-0 dark:text-whit">Attendance</a>
                             </li>
                             {verifyUser() ? <li>
                                 <p onClick={() => {

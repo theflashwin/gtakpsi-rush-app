@@ -321,8 +321,8 @@ export default function RusheeZoom() {
                                         <p className="text-slate-300">Pronouns: {rushee.pronouns}</p>
                                         <p className="text-slate-300">Major: {rushee.major}</p>
                                         <p>Email: {rushee.email}</p>
-                                        <p>Phone: {rushee.phone_number}</p>
-                                        <p>Housing: {rushee.housing}</p>
+                                        {/* <p>Phone: {rushee.phone_number}</p> */}
+                                        {/* <p>Housing: {rushee.housing}</p> */}
                                         <p>GTID: {rushee.gtid}</p>
                                     </div>
                                 </div>
@@ -335,7 +335,7 @@ export default function RusheeZoom() {
                                     Submit PIS
                                 </div>
                                 <div onClick={handleCopy} className="cursor-pointer flex items-center justify-center bg-slate-400 h-12 w-full rounded-lg bg-gradient-to-r from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 focus:ring transform transition hover:scale-105 duration-300 ease-in-out">
-                                    {copied ? "Copied!" : "Copy Edit Page Link"}
+                                    {copied ? "Link Copied!" : "Copy Edit Page Link"}
                                 </div>
                             </div>
 
