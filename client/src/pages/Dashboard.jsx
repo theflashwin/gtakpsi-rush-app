@@ -93,7 +93,7 @@ export default function Dashboard(props) {
         threshold: 0.3, // Less strict
         minMatchCharLength: 1, // Minimum length of matching characters
     });
-    
+
 
     const handleSearch = (e) => {
         const input = e.target.value;
@@ -136,7 +136,7 @@ export default function Dashboard(props) {
                 const bLastName = b.name.split(" ").slice(-1)[0];
                 return aLastName.localeCompare(bLastName);
             });
-        }        
+        }
 
         console.log(filtered)
         setFilteredRushees(filtered);
@@ -291,6 +291,9 @@ export default function Dashboard(props) {
                                 </div>
 
                             </div>
+
+                            <div className="h-10" />
+
                         </div>
                     )}
                 </div>
