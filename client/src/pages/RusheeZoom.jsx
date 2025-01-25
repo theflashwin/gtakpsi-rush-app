@@ -365,7 +365,7 @@ export default function RusheeZoom() {
                                 <h2 className="text-xl font-semibold text-gray-200">PIS Details</h2>
                                 <p className="mt-2 text-slate-300">
                                     🕒 Timeslot:{" "}
-                                    {new Date(parseInt(rushee.pis_timeslot.$date.$numberLong)).toUTCString()}
+                                    {dayjs(parseInt(rushee.pis_timeslot.$date.$numberLong)).format('ddd, DD MMM YYYY HH:mm:ss')}
                                 </p>
                                 <p className="mt-2 text-slate-300">
                                     Brother 1:{" "}
