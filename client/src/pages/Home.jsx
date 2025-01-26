@@ -125,7 +125,7 @@ export default function Home() {
                         Register for Rush
                     </button>
                     <button onClick={() => {
-                        navigate("/dashboard")
+                        navigate("/login")
                     }} className="px-6 py-3 bg-orange-300 text-white font-semibold rounded-lg shadow-md hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                         Brother Login
                     </button>
