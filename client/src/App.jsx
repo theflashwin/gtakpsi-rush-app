@@ -23,6 +23,7 @@ import BrotherPIS from './pages/BrotherPIS';
 import AddTimeslotPage from './pages/AddTimeslotPage';
 import AddPIS from './pages/AddPIS';
 import PISDashboard from './pages/PISDashboard';
+import NotFound from './pages/404';
 
 function App() {
 
@@ -47,6 +48,7 @@ function App() {
           <Route path='/attendance' element={<Attendance/>} />
           <Route path='/brother/pis' element={<BrotherPIS/>} />
           <Route path='/brother/dashboard' element={<PISDashboard/>} />
+          <Route path='*' element={<NotFound/>} />
 
           <Route path='/admin/addpis' element={<AddPIS/>} />
 

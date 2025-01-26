@@ -9,11 +9,18 @@ Add info as needed into rush_nights.json and pis_timeslots.json
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from tqdm import tqdm
+from datetime import datetime
 
 import json
 import os
 import requests
 import boto3
+
+# Restrict script from running between January 26th and February 1st
+current_date = datetime.now()
+if datetime(current_date.year, 1, 26) <= current_date <= datetime(current_date.year, 2, 1):
+    print("This script cannot be run between January 26th and February 1st. [Spring 2025 Rush]")
+    exit()
 
 # Load environment variables from .env file
 load_dotenv()
@@ -47,6 +54,12 @@ print("Deleting all PIS timeslots...")
 pis_timeslot_collection = db["pis-timeslots"]
 pis_timeslot_collection.delete_many({})
 print("Deleted all PIS timeslots.")
+
+# delete all PIS questions
+print("Deleting all PIS questions...")
+pis_question_collection = db["pis-questions"]
+pis_question_collection .delete_many({})
+print("Deleted all PIS questions.")
 
 print("Deleting all Rush App pictures...")
 
@@ -107,6 +120,20 @@ with open("rush_nights.json", "r") as file:
                 errors.append(response.json().get("message"))
         else:
             errors.append(f"Some network error occurred while adding Rush Night {data[i]["name"]}")
+
+with open("pis_questions.json", "r") as file:
+
+    data = json.load(file)
+
+    for i in tqdm(range(len(data)), desc="Adding PIS Questions"):
+        response = requests.post(api_url + "/admin/add_pis_question", json=data[i])
+        
+        if response.status_code == 200:
+            if response.json().get("status") == "error":
+                errors.append(response.json().get("message"))
+        else:
+            errors.append(f"Some network error occurred while adding PIS Question {data[i]["question"]}")
+
 
 if len(errors) > 0:
 

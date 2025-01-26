@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       'animation': {
-            'text':'text 3s ease infinite',
+            'text':'text 8s ease infinite',
         },
         'keyframes': {
             'text': {

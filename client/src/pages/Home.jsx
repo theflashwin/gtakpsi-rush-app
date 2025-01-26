@@ -1,8 +1,10 @@
 import React, { useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { useNavigate } from "react-router-dom";
 
 const LiquidShader = () => {
+
     const meshRef = useRef();
     const clock = new THREE.Clock();
 
@@ -93,6 +95,9 @@ const LiquidShader = () => {
 };
 
 export default function Home() {
+
+    const navigate = useNavigate()
+
     return (
         <div className="relative w-full h-screen overflow-hidden bg-gradient-to-r from-blue-800 via-yellow-00 to-blue-800">
             {/* Fullscreen Canvas */}
@@ -120,9 +125,9 @@ export default function Home() {
                         Register for Rush
                     </button>
                     <button onClick={() => {
-                        window.location.href = 'https://gtakpsi.com/rush'
+                        navigate("/dashboard")
                     }} className="px-6 py-3 bg-orange-300 text-white font-semibold rounded-lg shadow-md hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
-                        Learn More
+                        Brother Login
                     </button>
                 </div>
             </div>

@@ -95,21 +95,9 @@ const LiquidShader = () => {
     );
 };
 
-export default function MyError(props) {
-
-    const { title, description } = useParams()
+export default function NotFound(props) {
 
     const navigate = useNavigate()
-
-    let titleShown = title ? title : "Something untoward occurred..."
-    let descriptionShown = description ? description : "Please try again later or contact support."
-
-    if (props.wrongpage) {
-
-        titleShown = "404"
-        descriptionShown = "Sorry! We couldn't find that page."
-
-    }
 
     return (
 
@@ -144,10 +132,10 @@ export default function MyError(props) {
                 </div>
 
                 {/* Title */}
-                <h1 className="text-3xl font-bold text-white mt-6 text-center">{title}</h1>
+                <h1 className="text-3xl font-bold text-white mt-6 text-center">404</h1>
 
                 {/* Description */}
-                <p className="text-lg text-white mt-3 text-center max-w-xl">{description}</p>
+                <p className="text-lg text-white mt-3 text-center max-w-xl">Sorry, we couldn't find this page!</p>
 
                 <button onClick={() => {
                     navigate("/")
