@@ -5,6 +5,7 @@ import axios from "axios";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar"
 import MyError from "../components/Error";
+import Badges from "../components/Badge";
 
 import { verifyUser } from "../js/verifications";
 

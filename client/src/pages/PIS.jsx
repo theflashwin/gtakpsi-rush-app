@@ -38,6 +38,13 @@ export default function PIS() {
                         .then((response) => {
                             if (response.data.status === "success") {
                                 setRushee(response.data.payload);
+
+                                // Prepopulate answers with existing PIS answers
+                                const existingAnswers = {};
+                                response.data.payload.pis?.forEach((pis) => {
+                                    existingAnswers[pis.question] = pis.answer;
+                                });
+                                setAnswers(existingAnswers);
                             } else {
                                 navigate(`/error/${errorTitle}/${"Rushee with this GTID does not exist"}`);
                             }
@@ -47,7 +54,6 @@ export default function PIS() {
                     await axios.get(`${api}/admin/get_pis_questions`)
                         .then((response) => {
                             if (response.data.status === "success") {
-                                console.log(response.data.payload)
                                 setQuestions(response.data.payload);
                             } else {
                                 navigate(`/error/${errorTitle}/${"Failed to fetch PIS questions"}`);
@@ -69,7 +75,6 @@ export default function PIS() {
 
     // Handle answer input changes
     const handleAnswerChange = (question, answer) => {
-
         setAnswers((prev) => ({
             ...prev,
             [question]: answer,
@@ -78,21 +83,18 @@ export default function PIS() {
 
     // Handle form submission
     const handleSubmit = async () => {
+        setLoading(true);
 
-        setLoading(true)
-
-        const payload = Object.keys(answers)
-            .filter((question) => answers[question].trim() !== "")
-            .map((question) => ({
-                question: question,
-                answer: answers[question],
-            }));
+        // Prepare the payload with all questions, including unanswered ones
+        const payload = questions.map((question) => ({
+            question: question.question,
+            answer: answers[question.question] || "", // Use an empty string for unanswered questions
+        }));
 
         await axios.post(`${api}/rushee/post-pis/${gtid}`, payload)
             .then((response) => {
-
                 if (response.data.status === "success") {
-                    navigate(`/brother/rushee/${gtid}`)
+                    navigate(`/brother/rushee/${gtid}`);
                 } else {
                     toast.error(`${response.data.message}`, {
                         position: "top-center",
@@ -105,10 +107,9 @@ export default function PIS() {
                         theme: "dark",
                     });
                 }
-
             })
-            .catch((error) => {
-                toast.error(`some network error occurred`, {
+            .catch(() => {
+                toast.error("Some network error occurred", {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -118,10 +119,9 @@ export default function PIS() {
                     progress: undefined,
                     theme: "dark",
                 });
-            })
+            });
 
-        setLoading(false)
-
+        setLoading(false);
     };
 
     return (
@@ -164,62 +164,47 @@ export default function PIS() {
                     <div className="mt-10 max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg p-6">
                         <h1 className="text-3xl font-bold text-gray-200 mb-6">PIS Questions</h1>
                         {questions.length > 0 ? (
-                            questions.map((question, idx) => {
-                                // Check if a response exists for the current question
-                                const existingResponse = rushee.pis?.find(
-                                    (response) => response.question === question.question
-                                );
+                            questions.map((question, idx) => (
+                                <div key={idx} className="mb-6">
+                                    <p className="text-gray-200 font-semibold mb-2">
+                                        {idx + 1}. {question.question}
+                                    </p>
 
-                                return (
-                                    <div key={idx} className="mb-6">
-                                        <p className="text-gray-200 font-semibold mb-2">
-                                            {idx + 1}. {question.question}
-                                        </p>
-
-                                        {existingResponse ? (
-                                            // Display existing response
-                                            <p className="text-gray-300 bg-slate-600 p-3 rounded-lg">
-                                                {existingResponse.answer}
-                                            </p>
-                                        ) : (
-                                            // Show input box for unanswered question
-
-                                            <div>
-                                                {question.question_type === "MC" ? <div className="flex items-center space-x-4">
-                                                    <label className="flex items-center text-gray-200">
-                                                        <input
-                                                            type="radio"
-                                                            name={question.question}
-                                                            value="Yes"
-                                                            checked={answers[question.question] === "Yes"}
-                                                            onChange={(e) => handleAnswerChange(question.question, e.target.value)}
-                                                            className="mr-2"
-                                                        />
-                                                        Yes
-                                                    </label>
-                                                    <label className="flex items-center text-gray-200">
-                                                        <input
-                                                            type="radio"
-                                                            name={question.question}
-                                                            value="No"
-                                                            checked={answers[question.question] === "No"}
-                                                            onChange={(e) => handleAnswerChange(question.question, e.target.value)}
-                                                            className="mr-2"
-                                                        />
-                                                        No
-                                                    </label>
-                                                </div> : <textarea
-                                                    className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
-                                                    placeholder="Your answer..."
-                                                    value={answers[question.question] || ""}
+                                    {question.question_type === "MC" ? (
+                                        <div className="flex items-center space-x-4">
+                                            <label className="flex items-center text-gray-200">
+                                                <input
+                                                    type="radio"
+                                                    name={question.question}
+                                                    value="Yes"
+                                                    checked={answers[question.question] === "Yes"}
                                                     onChange={(e) => handleAnswerChange(question.question, e.target.value)}
-                                                />}
-                                            </div>
-
-                                        )}
-                                    </div>
-                                );
-                            })
+                                                    className="mr-2"
+                                                />
+                                                Yes
+                                            </label>
+                                            <label className="flex items-center text-gray-200">
+                                                <input
+                                                    type="radio"
+                                                    name={question.question}
+                                                    value="No"
+                                                    checked={answers[question.question] === "No"}
+                                                    onChange={(e) => handleAnswerChange(question.question, e.target.value)}
+                                                    className="mr-2"
+                                                />
+                                                No
+                                            </label>
+                                        </div>
+                                    ) : (
+                                        <textarea
+                                            className="w-full p-3 bg-slate-600 text-gray-200 rounded-lg focus:outline-none focus:ring focus:ring-blue-500"
+                                            placeholder="Your answer..."
+                                            value={answers[question.question] || ""}
+                                            onChange={(e) => handleAnswerChange(question.question, e.target.value)}
+                                        />
+                                    )}
+                                </div>
+                            ))
                         ) : (
                             <p className="text-gray-300">No questions available.</p>
                         )}
@@ -233,10 +218,8 @@ export default function PIS() {
                     </div>
 
                     <div className="h-20" />
-
                 </div>
             )}
-
         </div>
     );
 }

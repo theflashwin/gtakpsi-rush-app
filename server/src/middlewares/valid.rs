@@ -53,7 +53,7 @@ pub async fn is_gtid_valid(gtid: &str) -> Result<bool, Error> {
         return Ok(false);
     }
 
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let filter = doc! {"gtid": gtid};
     let result = connection.find_one(filter).await;

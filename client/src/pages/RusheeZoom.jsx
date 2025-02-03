@@ -26,6 +26,9 @@ export default function RusheeZoom() {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editedCommentText, setEditedCommentText] = useState("");
 
+    const [selectedPis, setSelectedPis] = useState(null);
+    const [selectedComment, setSelectedComment] = useState(null);
+
     const [rushee, setRushee] = useState();
     const [isAddingComment, setIsAddingComment] = useState(false);
     const [newComment, setNewComment] = useState("");
@@ -297,6 +300,81 @@ export default function RusheeZoom() {
             ) : (
                 <div>
                     <div className="h-screen w-screen bg-slate-800">
+
+                        {/* Modal for Zoomed-In Comment */}
+                        {selectedComment && (
+                            <div
+                                className="fixed inset-0 z-50 flex items-center justify-center
+               bg-black bg-opacity-50"
+                                onClick={() => setSelectedComment(null)} // close if user clicks backdrop
+                            >
+                                {/* Modal inner box, stops click propagation */}
+                                <div
+                                    className="bg-slate-700 rounded-lg shadow-lg p-6 w-11/12 max-w-2xl
+                 transform scale-100 transition-transform duration-200"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {/* Close button */}
+                                    <button
+                                        className="text-gray-300 hover:text-white float-right text-xl
+                   focus:outline-none"
+                                        onClick={() => setSelectedComment(null)}
+                                    >
+                                        &times;
+                                    </button>
+
+                                    {/* Modal Content */}
+                                    <h3 className="text-3xl font-semibold mb-2 text-gray-200">
+                                        Comment from <span className="font-bold bg-gradient-to-r from-sky-700 via-amber-600 to-sky-700 animate-text bg-clip-text text-transparent">{selectedComment.brother_name}</span>
+                                    </h3>
+                                    <p className="text-gray-200 text-2xl mb-4">{selectedComment.comment}</p>
+
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                                {selectedComment.ratings.map((rating, rIdx) => (
+                                                    <span
+                                                        key={rIdx}
+                                                        className="bg-slate-500 text-gray-200 px-2 py-1 rounded text-sm"
+                                                    >
+                                                        {rating.name}: {rating.value == 5 ? "Satisfactory" : "Unsatisfactory"}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ADD THIS (Modal for Zoomed-In PIS View) */}
+                        {selectedPis && (
+                            <div
+                                className="fixed inset-0 z-50 flex items-center justify-center
+               bg-black bg-opacity-50"
+                                onClick={() => setSelectedPis(null)} // close if user clicks backdrop
+                            >
+                                {/* This inner box stops clicks from propagating to backdrop */}
+                                <div
+                                    className="bg-slate-700 rounded-lg shadow-lg p-6 w-11/12 max-w-2xl
+                 transform scale-100 transition-transform duration-200"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
+                                    {/* Close button */}
+                                    <button
+                                        className="text-gray-300 hover:text-white float-right text-xl
+                   focus:outline-none"
+                                        onClick={() => setSelectedPis(null)}
+                                    >
+                                        &times;
+                                    </button>
+
+                                    {/* Modal content */}
+                                    <h3 className="text-2xl font-semibold text-blue-400 mt-2">Q:</h3>
+                                    <p className="text-gray-200 text-2xl mb-4">{selectedPis.question}</p>
+
+                                    <h3 className="text-2xl font-semibold text-green-400">A:</h3>
+                                    <p className="text-gray-200 text-2xl">{selectedPis.answer}</p>
+                                </div>
+                            </div>
+                        )}
+
                         <Navbar />
                         <div className="h-10" />
 
@@ -320,10 +398,11 @@ export default function RusheeZoom() {
                                         </div>
                                         <p className="text-slate-300">Pronouns: {rushee.pronouns}</p>
                                         <p className="text-slate-300">Major: {rushee.major}</p>
-                                        <p>Email: {rushee.email}</p>
+                                        <p className="text-slate-300">Class: {rushee.class}</p>
+                                        <p className="text-slate-300">Email: {rushee.email}</p>
                                         {/* <p>Phone: {rushee.phone_number}</p> */}
                                         {/* <p>Housing: {rushee.housing}</p> */}
-                                        <p>GTID: {rushee.gtid}</p>
+                                        <p className="text-slate-300">GTID: {rushee.gtid}</p>
                                     </div>
                                 </div>
                             </div>
@@ -362,33 +441,63 @@ export default function RusheeZoom() {
 
                             {/* PIS Responses */}
                             <div className="max-w-4xl max-h-[40rem] mx-auto bg-slate-700 shadow-lg rounded-lg mt-6 p-6 overflow-y-scroll no-scrollbar">
-                                <h2 className="text-xl font-semibold text-gray-200">PIS Details</h2>
+                                <h2 className="text-xl font-semibold text-gray-200 mb-4">PIS Details</h2>
+
                                 <p className="mt-2 text-slate-300">
                                     🕒 Timeslot:{" "}
                                     {dayjs(parseInt(rushee.pis_timeslot.$date.$numberLong)).format('ddd, DD MMM YYYY HH:mm:ss')}
                                 </p>
                                 <p className="mt-2 text-slate-300">
-                                    Brother 1:{" "}
-                                    {rushee.pis_signup.first_brother_first_name + " " + rushee.pis_signup.first_brother_last_name}
+                                    <strong>Brother 1:</strong> {rushee.pis_signup.first_brother_first_name} {rushee.pis_signup.first_brother_last_name}
                                 </p>
                                 <p className="mt-2 text-slate-300">
-                                    Brother 2:{" "}
-                                    {rushee.pis_signup.second_brother_first_name + " " + rushee.pis_signup.second_brother_last_name}
+                                    <strong>Brother 2:</strong> {rushee.pis_signup.second_brother_first_name} {rushee.pis_signup.second_brother_last_name}
                                 </p>
-                                <div className="mt-4">
-                                    <h3 className="text-lg font-semibold text-gray-200">PIS Responses</h3>
-                                    {rushee.pis.map((pis, idx) => (
-                                        <div key={idx} className="mt-2 text-slate-300">
-                                            <p>
-                                                <strong>Q:</strong> {pis.question}
-                                            </p>
-                                            <p>
-                                                <strong>A:</strong> {pis.answer}
-                                            </p>
+
+                                {/* PIS Responses Section */}
+                                <div className="mt-6">
+                                    <h3 className="text-lg font-semibold text-gray-200 mb-2">PIS Responses</h3>
+                                    <div className="space-y-4">
+                                        {rushee.pis.map((pis, idx) => (
+                                            // ADD THIS onClick:
+                                            <div
+                                                key={idx}
+                                                className="bg-slate-600 p-4 rounded-lg shadow-md border border-gray-500
+                   hover:bg-slate-500 cursor-pointer transition duration-200"
+                                                onClick={() => setSelectedPis(pis)} // ADD THIS
+                                            >
+                                                <p className="text-gray-300 font-semibold">
+                                                    <strong className="text-blue-400">Q:</strong> {pis.question}
+                                                </p>
+                                                <p className="text-gray-200 mt-2">
+                                                    <strong className="text-green-400">A:</strong> {pis.answer}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Section: Brothers who wrote comments */}
+                            <div className="max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg mt-6 p-6">
+                                <h2 className="text-xl font-semibold text-gray-200 mb-4">
+                                    Brothers Who Commented
+                                </h2>
+                                <div className="flex flex-wrap gap-2">
+                                    {rushee.comments.map((comment, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="bg-slate-500 text-gray-200 px-3 py-1 rounded-lg
+                   hover:bg-slate-400 cursor-pointer
+                   transform transition-all duration-200 ease-in-out
+                   hover:-translate-y-1 hover:scale-105"
+                                        >
+                                            {comment.brother_name}
                                         </div>
                                     ))}
                                 </div>
                             </div>
+
 
                             {/* Comments */}
                             <div className="max-w-4xl mx-auto bg-slate-700 shadow-lg rounded-lg mt-6 p-6">
@@ -453,21 +562,38 @@ export default function RusheeZoom() {
                                     {rushee.comments.map((comment, idx) => (
                                         <div
                                             key={idx}
-                                            className="relative mt-4 bg-slate-600 p-4 rounded-lg"
+                                            // Add this onClick to open the modal if the user clicks anywhere 
+                                            // except on the edit/delete icons.
+                                            onClick={() => setSelectedComment(comment)}
+                                            className="relative mt-4 bg-slate-600 p-4 rounded-lg
+               hover:bg-slate-500 cursor-pointer transition duration-200 border border-gray-500"
                                         >
                                             {/* Buttons in the top-right corner */}
-                                            <div className={user.firstname + " " + user.lastname === comment.brother_name && editingCommentId !== comment.comment ? "absolute top-2 right-2 flex space-x-2" : "hidden"}>
+                                            <div
+                                                className={
+                                                    user.firstname + " " + user.lastname === comment.brother_name &&
+                                                        editingCommentId !== comment.comment
+                                                        ? "absolute top-2 right-2 flex space-x-2"
+                                                        : "hidden"
+                                                }
+                                            >
                                                 <button
-                                                    onClick={() => handleEditComment(comment)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();  // Prevent click from opening modal
+                                                        handleEditComment(comment);
+                                                    }}
                                                     className="text-gray-400 hover:text-blue-500 text-xl"
                                                 >
-                                                    <FaEdit /> {/* Edit Icon */}
+                                                    <FaEdit />
                                                 </button>
                                                 <button
-                                                    onClick={() => handleDeleteComment(comment)}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();  // Prevent click from opening modal
+                                                        handleDeleteComment(comment);
+                                                    }}
                                                     className="text-gray-400 hover:text-red-500 text-xl"
                                                 >
-                                                    <FaTrash /> {/* Delete Icon */}
+                                                    <FaTrash />
                                                 </button>
                                             </div>
 

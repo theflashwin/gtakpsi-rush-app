@@ -59,11 +59,11 @@ export default function Dashboard(props) {
                         .then((response) => {
                             if (response.data.status === "success") {
 
+                                console.log(response.data.payload.length)
+
                                 const shuffledRushees = shuffleArray(response.data.payload); // Shuffle the array
                                 setRushees(shuffledRushees);
                                 setFilteredRushees(shuffledRushees);
-
-                                console.log(response.data.payload)
 
                             } else {
                                 setErrorDescription("There was some issue fetching the rushees");
@@ -243,7 +243,7 @@ export default function Dashboard(props) {
                                         {filteredRushees.map((rushee) => (
                                             <div
                                                 onClick={() => {
-                                                    navigate(`/brother/rushee/${rushee.gtid}`);
+                                                    window.open(`/brother/rushee/${rushee.gtid}`, "_blank");
                                                 }}
                                                 key={rushee.id}
                                                 className="flex cursor-pointer flex-col bg-slate-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border-2 border-transparent hover:border-blue-500"
@@ -280,7 +280,7 @@ export default function Dashboard(props) {
                                                                 key={rIdx}
                                                                 className="bg-slate-500 text-gray-200 px-2 py-1 rounded text-sm"
                                                             >
-                                                                {rating.name}: {rating.value}
+                                                                {rating.name}: {((rating.value / 5) * 100).toFixed(2)}%
                                                             </span>
                                                         ))}
                                                     </div>

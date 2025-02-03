@@ -24,7 +24,7 @@ use super::{db, rushee};
  * Add a PIS question
  */
 pub async fn add_pis_question(Json(payload): Json<PISQuestion>) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_pis_questions_client();
+    let connection = db::get_pis_questions_client().await;
 
     let new_question = PISQuestion {
         question: payload.question,
@@ -51,7 +51,7 @@ pub async fn add_pis_question(Json(payload): Json<PISQuestion>) -> Result<Json<V
 pub async fn delete_pis_question(
     Json(payload): Json<PISQuestion>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_pis_questions_client();
+    let connection = db::get_pis_questions_client().await;
 
     let filter = doc! {"$and": [
         doc! {"question": payload.question},
@@ -76,7 +76,7 @@ pub async fn delete_pis_question(
  * Fetch all the PIS questions
  */
 pub async fn get_pis_questions() -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_pis_questions_client();
+    let connection = db::get_pis_questions_client().await;
     let result = connection.find(doc! {}).await;
 
     match result {
@@ -115,7 +115,7 @@ pub async fn get_pis_questions() -> Result<Json<Value>, StatusCode> {
 pub async fn add_pis_timeslot(
     Json(payload): Json<PISTimeslotIncoming>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_pis_timeslots_client();
+    let connection = db::get_pis_timeslots_client().await;
 
     let time = timeHelpers::string_to_bson_datetime(&payload.time);
 
@@ -191,7 +191,7 @@ pub async fn add_pis_timeslot(
 pub async fn delete_pis_timeslot(
     Json(payload): Json<PISTimeslotIncoming>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_pis_timeslots_client();
+    let connection = db::get_pis_timeslots_client().await;
 
     let time = timeHelpers::string_to_bson_datetime(&payload.time);
 
@@ -266,7 +266,7 @@ pub async fn delete_pis_timeslot(
  * Fetch all the PIS timeslots
  */
 pub async fn get_pis_timeslots() -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_pis_timeslots_client();
+    let connection = db::get_pis_timeslots_client().await;
 
     let result = connection.find(doc! {}).await;
 
@@ -305,7 +305,7 @@ pub async fn get_pis_timeslots() -> Result<Json<Value>, StatusCode> {
 pub async fn add_rush_night(
     Json(payload): Json<IncomingRushNight>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rush_nights_client();
+    let connection = db::get_rush_nights_client().await;
 
     let new_rush_night = RushNight {
         time: string_to_bson_datetime(&payload.time),
@@ -332,7 +332,7 @@ pub async fn add_rush_night(
  * Fix this later -> make it only date, right now the time is set to 12:00 PM, or should be
  */
 pub async fn delete_rush_night(Json(payload): Json<RushNight>) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rush_nights_client();
+    let connection = db::get_rush_nights_client().await;
 
     let filter = doc! {"time": payload.time};
     let result = connection.delete_one(filter).await;
@@ -354,7 +354,7 @@ pub async fn brother_pis_sign_up(
     Path(id): Path<String>,
     Json(payload): Json<IncomingPISSignup>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
     let fetch_rushee = connection.find_one(doc! {"gtid": id.clone()}).await;
 
     match fetch_rushee {
@@ -481,7 +481,7 @@ pub async fn brother_pis_sign_up(
 pub async fn get_brother_pis(
     Json(payload): Json<IncomingBrotherName>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let result = connection
         .find({

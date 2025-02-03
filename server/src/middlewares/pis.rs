@@ -6,7 +6,7 @@ use crate::controllers::db;
 
 pub async fn take_pis_timeslot(time: DateTime) -> Result<bool, Error> {
 
-    let connection = db::get_pis_timeslots_client();
+    let connection = db::get_pis_timeslots_client().await;
 
     let find_query= doc! {"time": time};
     let find = connection.find_one(find_query).await;
@@ -61,7 +61,7 @@ pub async fn take_pis_timeslot(time: DateTime) -> Result<bool, Error> {
 
 pub async fn vacate_pis_timeslot(time: DateTime) -> Result<bool, Error> {
 
-    let connection = db::get_pis_timeslots_client();
+    let connection = db::get_pis_timeslots_client().await;
 
     let find_query= doc! {"time": time};
     let find = connection.find_one(find_query).await;

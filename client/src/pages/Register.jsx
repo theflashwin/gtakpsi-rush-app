@@ -172,19 +172,23 @@ export default function Register() {
             },
         });
 
+        let command;
+        let s3Key;
+        let uploadParams;
+
         try {
 
-            const s3Key = `${gtidVal}.jpg`;
+            s3Key = `${gtidVal}.jpg`;
 
             // Prepare the upload parameters
-            const uploadParams = {
+            uploadParams = {
                 Bucket: "rush-app-pictures", // S3 bucket name
                 Key: s3Key, // File name
                 Body: base64ToBlob(image), // File content
                 ContentType: image.type, // File MIME type (e.g., image/jpeg)
             };
 
-            const command = new PutObjectCommand(uploadParams);
+            command = new PutObjectCommand(uploadParams);
 
         } catch (error) {
 
@@ -192,7 +196,7 @@ export default function Register() {
 
             setErrorTitle("Uh Oh! Something Unexpected Occurred..")
             setErrorDescription("There was an error uploading your image to the cloud.")
-            navigate(`/error/${errorTitle}/${"There was an error uploading your image to the cloud."}`)
+            navigate(`/error/${errorTitle}/${"There was man error uploading your image to the cloud."}`)
             return;
 
         }
@@ -203,9 +207,11 @@ export default function Register() {
 
         } catch (error) {
 
+            console.log(error)
+
             setErrorTitle("Uh Oh! Something Unexpected Occurred..")
             setErrorDescription("There was an error uploading your image to the cloud.")
-            navigate(`/error/${errorTitle}/${"There was an error uploading your image to the cloud."}`)
+            navigate(`/error/${errorTitle}/${"There was an xerror uploading your image to the cloud."}`)
             return;
 
         }

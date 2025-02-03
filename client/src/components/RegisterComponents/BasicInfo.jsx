@@ -224,10 +224,8 @@ export default function BasicInfo(props) {
                         </select>
 
                     </div>
-                </div>
 
-                {/* Submit Button */}
-                <div className="flex justify-center">
+                    <div className="w-full pb-10 flex justify-center">
                     <button
                         onClick={props.func}
                         className="bg-gradient-to-r mt-3 from-sky-700 to-amber-600 hover:from-pink-500 hover:to-green-500 text-white font-bold py-2 px-4 rounded focus:ring transform transition hover:scale-105 duration-300 ease-in-out"
@@ -236,6 +234,11 @@ export default function BasicInfo(props) {
                         Submit
                     </button>
                 </div>
+
+                </div>
+                
+
+
             </form>
         </div>
 

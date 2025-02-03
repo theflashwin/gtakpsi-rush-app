@@ -13,7 +13,7 @@ pub async fn get_rush_nights() -> Result<Vec<RushNight>, Error> {
 
     let mut answer = Vec::<RushNight>::new();
 
-    let connection = db::get_rush_nights_client();
+    let connection = db::get_rush_nights_client().await;
 
     let result = connection.find(doc! {}).await;
 

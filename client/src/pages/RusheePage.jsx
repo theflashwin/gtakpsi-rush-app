@@ -423,9 +423,9 @@ export default function RusheePage() {
                                 </div>
                                 <p className="text-slate-300">Pronouns: {initialRushee.pronouns}</p>
                                 <p className="text-slate-300">Major: {initialRushee.major}</p>
-                                <p>Email: {initialRushee.email}</p>
-                                <p>Phone: {initialRushee.phone_number}</p>
-                                <p>Housing: {initialRushee.housing}</p>
+                                <p className="text-slate-300">Email: {initialRushee.email}</p>
+                                <p className="text-slate-300">Phone: {initialRushee.phone_number}</p>
+                                <p className="text-slate-300">Housing: {initialRushee.housing}</p>
                             </div>
                         </div>
                     </div>

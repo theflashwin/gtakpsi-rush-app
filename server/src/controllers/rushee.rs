@@ -40,7 +40,7 @@ struct Params {
  * Registers a new rushee
  */
 pub async fn signup(Json(payload): Json<IncomingRushee>) -> Result<Json<Value>, StatusCode> {
-    let collection: Collection<RusheeModel> = db::get_rushee_client();
+    let collection: Collection<RusheeModel> = db::get_rushee_client().await;
 
     // convert incoming timeslot to a bson DateTime type
     let date_converstion = timeHelpers::string_to_bson_datetime(&payload.pis_timeslot.to_string());
@@ -153,7 +153,7 @@ pub async fn signup(Json(payload): Json<IncomingRushee>) -> Result<Json<Value>, 
  * filters are passed in through the header
  */
 pub async fn get_rushees() -> Result<Json<Value>, StatusCode> {
-    let collection: Collection<RusheeModel> = db::get_rushee_client();
+    let collection: Collection<RusheeModel> = db::get_rushee_client().await;
 
     let result = collection
         .find({
@@ -204,7 +204,7 @@ pub async fn get_rushees() -> Result<Json<Value>, StatusCode> {
 
 // returns comments, ratings, etc..
 pub async fn get_rushee(Path(id): Path<String>) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let result = connection.find_one(doc! {"gtid": id.clone()}).await;
 
@@ -238,7 +238,7 @@ pub async fn post_comment(
     Path(id): Path<String>,
     Json(payload): Json<IncomingComment>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
     let fetch_rush_nights = attendance::get_rush_nights().await;
 
     match fetch_rush_nights {
@@ -469,10 +469,31 @@ pub async fn post_pis(
     Path(id): Path<String>,
     Json(payload): Json<Vec<PisResponse>>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let mut filter;
     let mut update;
+
+    // null out current entries
+    filter = doc! {"gtid": id.clone()};
+    update = doc! {"$set": doc! { "pis" : [] }};
+
+    let clear_out_result = connection.update_one(filter, update).await;
+
+    match clear_out_result {
+
+        Ok(_clear_out) => {
+
+        }
+
+        Err(_err) => {
+            return Ok(Json(json!({
+                "status": "success",
+                "message": "There was an error clearing out the current PIS responses"
+            })))
+        }
+
+    }
 
     let mut pis_bson_try;
     let mut pis_bson;
@@ -528,7 +549,7 @@ pub async fn post_pis(
  */
 pub async fn update_attendance(Path(id): Path<String>) -> Result<Json<Value>, StatusCode> {
     let fetch_rush_nights = attendance::get_rush_nights().await;
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     match fetch_rush_nights {
         Ok(rush_nights) => {
@@ -599,7 +620,7 @@ pub async fn update_cloud(
     Path(id): Path<String>,
     Json(payload): Json<String>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let filter = doc! {"_id": id};
     let update = doc! {"$set": doc! {"cloud": payload}};
@@ -626,7 +647,7 @@ pub async fn update_rushee(
     Path(id): Path<String>,
     Json(payload): Json<Vec<RusheeEdit>>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let mut filter: Document;
     let mut update: Document;
@@ -697,7 +718,7 @@ pub async fn reschedule_pis(
     Json(payload): Json<String>,
 ) -> Result<Json<Value>, StatusCode> {
     let time = timeHelpers::string_to_bson_datetime(&payload);
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let vacate_result = pis::vacate_pis_timeslot(time).await;
 
@@ -755,7 +776,7 @@ pub async fn delete_comment(
     Path(id): Path<String>,
     Json(payload): Json<Comment>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let filter = doc! {"gtid": id};
 
@@ -807,7 +828,7 @@ pub async fn edit_comment(
     Path(id): Path<String>,
     Json(payload): Json<Comment>,
 ) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let mut bson_night: bson::Bson;
     let bson_night_attempt = to_bson(&payload.night);
@@ -861,7 +882,7 @@ pub async fn edit_comment(
 }
 
 pub async fn does_rushee_exist(Path(id): Path<String>) -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let result = connection.find_one(doc! {"gtid": id.clone()}).await;
 
@@ -888,7 +909,7 @@ pub async fn does_rushee_exist(Path(id): Path<String>) -> Result<Json<Value>, St
 }
 
 pub async fn get_signup_timeslots() -> Result<Json<Value>, StatusCode> {
-    let connection = db::get_rushee_client();
+    let connection = db::get_rushee_client().await;
 
     let result = connection
         .find({

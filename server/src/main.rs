@@ -51,8 +51,6 @@ async fn main() -> Result<(), Error> {
 
     // let mongo_uri = env::var("MONGO_URI").expect("MONGO URI Must be Set");
 
-    controllers::db::initialize_mongo_client(&"mongodb+srv://gtakpsisoftware:brznOWH0oPA9fT5N@gtakpsi.bf6r1.mongodb.net/").await?;
-
     let app = Router::new()
 
         .route("/rushee/signup", post(controllers::rushee::signup).options(|| async { StatusCode::OK }))

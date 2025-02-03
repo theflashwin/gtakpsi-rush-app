@@ -2,21 +2,20 @@ use mongodb::{options::ClientOptions, Client, Collection};
 use std::sync::Arc;
 use tokio::sync::OnceCell;
 
-use crate::models::{misc::RushNight, pis::{PISQuestion, PISTimeslot}, Rushee};
+use crate::models::{misc::RushNight, pis::{PISQuestion, PISTimeslot}, Rushee::RusheeModel};
 
 pub static MONGO_CLIENT: OnceCell<Arc<Client>> = OnceCell::const_new();
 
-/// Initialize the MongoDB client
-pub async fn initialize_mongo_client(uri: &str) -> Result<(), mongodb::error::Error> {
-    let client_options = ClientOptions::parse(uri).await?;
-    let client = Client::with_options(client_options)?;
+pub async fn get_mongo_client() -> Arc<Client> {
     MONGO_CLIENT
-        .set(Arc::new(client))
-        .map_err(|_| mongodb::error::Error::from(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "Failed to initialize MongoDB client",
-        )))?;
-    Ok(())
+        .get_or_init(|| async {
+            let uri = "mongodb+srv://gtakpsisoftware:brznOWH0oPA9fT5N@gtakpsi.bf6r1.mongodb.net/?connectTimeoutMS=3000&socketTimeoutMS=300000";
+            let client_options = ClientOptions::parse(uri).await.unwrap();
+            let client = Client::with_options(client_options).unwrap();
+            Arc::new(client)
+        })
+        .await
+        .clone()
 }
 
 /// Get a reference to the MongoDB client
@@ -27,18 +26,22 @@ pub fn get_client() -> Arc<Client> {
         .clone()
 }
 
-pub fn get_rushee_client() -> Collection<Rushee::RusheeModel> {
-    get_client().database("rush-app").collection("rushees").clone()
+pub async fn get_rushee_client() -> mongodb::Collection<RusheeModel> {
+    let client = get_mongo_client().await;
+    client.database("rush-app").collection("rushees")
 }
 
-pub fn get_pis_questions_client() -> Collection<PISQuestion> {
-    get_client().database("rush-app").collection("pis-questions").clone()
+pub async fn get_pis_questions_client() -> Collection<PISQuestion> {
+    let client = get_mongo_client().await;
+    client.database("rush-app").collection("pis-questions")
 }
 
-pub fn get_pis_timeslots_client() -> Collection<PISTimeslot> {
-    get_client().database("rush-app").collection("pis-timeslots").clone()
+pub async fn get_pis_timeslots_client() -> Collection<PISTimeslot> {
+    let client = get_mongo_client().await;
+    client.database("rush-app").collection("pis-timeslots")
 }
 
-pub fn get_rush_nights_client() -> Collection<RushNight> {
-    get_client().database("rush-app").collection("rush-nights").clone()
+pub async fn get_rush_nights_client() -> Collection<RushNight> {
+    let client = get_mongo_client().await;
+    client.database("rush-app").collection("rush-nights")
 }

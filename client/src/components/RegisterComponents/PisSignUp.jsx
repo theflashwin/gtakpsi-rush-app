@@ -78,44 +78,50 @@ export default function PisSignUp(props) {
                                 outside of a rush setting.
                             </h1>
                             <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                                {[...days.entries()].map(([day, timeslots]) => (
-                                    <div
-                                        key={day}
-                                        className="bg-gray-800 shadow-lg rounded-lg p-4"
-                                    >
-                                        <h2 className="text-xl font-semibold text-center mb-4">
-                                            {day}
-                                        </h2>
-                                        <div className="flex flex-wrap gap-2 justify-center">
-                                            {timeslots.map((slot, index) => (
-                                                <button
-                                                    key={index}
-                                                    onClick={() => handleSlotClick(slot)}
-                                                    className={`py-2 px-4 rounded-lg transition transform ${
-                                                        slot === props.selectedSlot
-                                                            ? "outline outline-2 outline-white"
-                                                            : ""
-                                                    } ${
-                                                        slot.num_available === 0
-                                                            ? "bg-gray-500 cursor-not-allowed"
-                                                            : "bg-gradient-to-r from-sky-700 via-teal-600 to-amber-600 hover:scale-105 hover:shadow-lg"
-                                                    }`}
-                                                    disabled={slot.num_available === 0}
-                                                >
-                                                    {slot.time.toLocaleTimeString([], {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                    })}
-                                                    <span className="block text-sm">
-                                                        {slot.num_available > 0
-                                                            ? `${slot.num_available} slots available`
-                                                            : "Full"}
-                                                    </span>
-                                                </button>
-                                            ))}
+                                {[...days.entries()]
+                                    .filter(([day]) => {
+                                        // Exclude Monday
+                                        const jsDate = new Date(day);
+                                        return jsDate.getDay() !== 1; // Monday is day 1
+                                    })
+                                    .map(([day, timeslots]) => (
+                                        <div
+                                            key={day}
+                                            className="bg-gray-800 shadow-lg rounded-lg p-4"
+                                        >
+                                            <h2 className="text-xl font-semibold text-center mb-4">
+                                                {day}
+                                            </h2>
+                                            <div className="flex flex-wrap gap-2 justify-center">
+                                                {timeslots.map((slot, index) => (
+                                                    <button
+                                                        key={index}
+                                                        onClick={() => handleSlotClick(slot)}
+                                                        className={`py-2 px-4 rounded-lg transition transform ${
+                                                            slot === props.selectedSlot
+                                                                ? "outline outline-2 outline-white"
+                                                                : ""
+                                                        } ${
+                                                            slot.num_available === 0
+                                                                ? "bg-gray-500 cursor-not-allowed"
+                                                                : "bg-gradient-to-r from-sky-700 via-teal-600 to-amber-600 hover:scale-105 hover:shadow-lg"
+                                                        }`}
+                                                        disabled={slot.num_available === 0}
+                                                    >
+                                                        {slot.time.toLocaleTimeString([], {
+                                                            hour: "2-digit",
+                                                            minute: "2-digit",
+                                                        })}
+                                                        <span className="block text-sm">
+                                                            {slot.num_available > 0
+                                                                ? `${slot.num_available} slots available`
+                                                                : "Full"}
+                                                        </span>
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
                             </div>
                             {props.selectedSlot && (
                                 <div className="mt-6 text-center text-green-500">
@@ -139,4 +145,5 @@ export default function PisSignUp(props) {
             )}
         </div>
     );
+    
 }

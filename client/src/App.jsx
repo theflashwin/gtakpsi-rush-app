@@ -24,6 +24,7 @@ import AddTimeslotPage from './pages/AddTimeslotPage';
 import AddPIS from './pages/AddPIS';
 import PISDashboard from './pages/PISDashboard';
 import NotFound from './pages/404';
+import SuccessPage from './components/AttendanceComponents/SuccessPage';
 
 function App() {
 
@@ -54,7 +55,7 @@ function App() {
 
         </Routes>
 
-        <div className="fixed bottom-0 w-full bg-blue-900 text-white text-center py-2 text-sm">
+        <div className="fixed z-20 bottom-0 w-full bg-blue-900 text-white text-center py-2 text-sm">
           Contact us at:{" "}   
           <a
             href="mailto:malenpatel@gatech.edu"
