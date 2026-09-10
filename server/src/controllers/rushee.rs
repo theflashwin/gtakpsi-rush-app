@@ -446,8 +446,19 @@ pub async fn post_comment(
 
     match fetch_rush_nights {
         Ok(rush_nights) => {
+            let active_night =
+                crate::middlewares::rush_nights::current_rush_night(&rush_nights, bson::DateTime::now());
+            let active_night_name = match active_night {
+                Some(n) => n.name,
+                None => {
+                    return Ok(Json(json!({
+                        "status": "error",
+                        "message": "no rush nights are configured"
+                    })))
+                }
+            };
             for rush_night in rush_nights.iter() {
-                if same_day(&rush_night.time, &bson::DateTime::now()) {
+                if rush_night.name == active_night_name {
                     // found rush night
                     let attempt_bson_night = to_bson(&rush_night);
                     let mut bson_night;
@@ -807,8 +818,19 @@ pub async fn update_attendance(Path(id): Path<String>) -> Result<Json<Value>, St
 
     match fetch_rush_nights {
         Ok(rush_nights) => {
+            let active_night =
+                crate::middlewares::rush_nights::current_rush_night(&rush_nights, bson::DateTime::now());
+            let active_night_name = match active_night {
+                Some(n) => n.name,
+                None => {
+                    return Ok(Json(json!({
+                        "status": "error",
+                        "message": "no rush nights are configured"
+                    })))
+                }
+            };
             for candidate_night in rush_nights.iter() {
-                if same_day(&candidate_night.time, &bson::DateTime::now()) {
+                if candidate_night.name == active_night_name {
                     // found rush night
 
                     let attempt_bson_night = to_bson(&candidate_night);

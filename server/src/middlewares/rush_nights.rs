@@ -36,6 +36,34 @@ fn is_dev_night(name: &str) -> bool {
     name.to_lowercase().contains("dev")
 }
 
+/// The rush night that a comment or check-in happening at `now` should be
+/// attributed to: the latest night whose start time has passed, allowing a
+/// 1-hour lead-in so activity that trickles in shortly before the event still
+/// counts. Falls back to the earliest night if none have started yet.
+///
+/// This replaces plain same-day matching so that, e.g., comments posted after
+/// midnight but before the next event still land on the previous night.
+pub fn current_rush_night(nights: &[RushNight], now: DateTime) -> Option<RushNight> {
+    if nights.is_empty() {
+        return None;
+    }
+
+    let mut sorted: Vec<&RushNight> = nights.iter().collect();
+    sorted.sort_by_key(|n| n.time.timestamp_millis());
+
+    const LEAD_IN_MS: i64 = 60 * 60 * 1000; // 1 hour before start still counts
+    let now_ms = now.timestamp_millis();
+
+    let chosen = sorted
+        .iter()
+        .rev()
+        .find(|n| now_ms >= n.time.timestamp_millis() - LEAD_IN_MS)
+        .copied()
+        .unwrap_or(sorted[0]);
+
+    Some(chosen.clone())
+}
+
 pub fn merge_rush_nights(db_nights: &[RushNight], comments: &[Comment]) -> Vec<RushNight> {
     let mut merged: Vec<RushNight> = db_nights.to_vec();
 
